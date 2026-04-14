@@ -8,23 +8,304 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Florescendo" />
-  <link rel="apple-touch-icon" href="/icon-192.png" />
-  <link rel="manifest" href="/manifest.json" />
   <meta property="og:title" content="Florescendo — Devocional Diário" />
   <meta property="og:description" content="Seu devocional diário para florescer com fé. 🌸" />
-  <meta property="og:type" content="website" />
-  <title>Florescendo</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <title>Florescendo 🌸</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; overflow: hidden; }
-    body { font-family: 'Lato', sans-serif; background: #fdf6f0; }
-    #app { height: 100%; }
+    html, body, #app { height: 100%; overflow: hidden; }
+    body { font-family: 'Lato', sans-serif; }
+
+    .screen { height: 100vh; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+    .band { width:100%; height:5px; flex-shrink:0; background:linear-gradient(90deg,#e8a4c4,#f4b896,#e8d5a3,#a8c8b0,#e8a4c4); }
+    .z1 { position: relative; z-index: 1; }
+
+    .brand { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:300; letter-spacing:3px; text-transform:uppercase; color:#9b4d72; }
+    .subbrand { font-size:10px; letter-spacing:1.5px; color:#b8957e; margin-top:3px; font-style:italic; }
+    .home-header { text-align:center; padding:20px 24px 4px; position:relative; z-index:1; }
+    .home-hero { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:0 32px 16px; text-align:center; position:relative; z-index:1; }
+    .hero-p { font-family:'Cormorant Garamond',serif; font-size:52px; font-weight:300; letter-spacing:-1px; margin-bottom:4px; }
+
+    .btn-main { border:none; border-radius:50px; padding:14px 32px; color:white; font-family:'Cormorant Garamond',serif; font-size:17px; letter-spacing:.5px; cursor:pointer; box-shadow:0 4px 20px rgba(155,77,114,0.25); transition:transform .15s; }
+    .btn-main:active { transform:scale(.97); }
+    .btn-back { background:transparent; border:1.5px solid rgba(155,77,114,0.3); border-radius:50px; padding:13px 18px; color:#9b4d72; font-size:13px; cursor:pointer; white-space:nowrap; }
+    .btn-back-w { border-color:rgba(255,255,255,0.4); color:white; }
+    .btn-ghost { background:rgba(255,255,255,0.2); border:1.5px solid rgba(255,255,255,0.45); border-radius:50px; padding:10px 18px; color:white; font-size:13px; cursor:pointer; }
+    .icon-btn { background:transparent; border:none; font-size:22px; cursor:pointer; padding:8px; border-radius:50%; width:42px; height:42px; display:flex; align-items:center; justify-content:center; }
+
+    .bottom-nav { display:flex; border-top:1px solid rgba(155,77,114,0.1); background:rgba(253,246,240,0.97); backdrop-filter:blur(12px); flex-shrink:0; padding-bottom:env(safe-area-inset-bottom,0px); }
+    .nav-btn { flex:1; background:transparent; border:none; padding:10px 4px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:3px; font-size:10px; color:#b8957e; }
+    .nav-btn span:first-child { font-size:20px; }
+    .nav-on { color:#9b4d72; }
+
+    .devo-bar { display:flex; align-items:center; justify-content:space-between; padding:12px 16px 4px; flex-shrink:0; position:relative; z-index:1; }
+    .dots-row { display:flex; gap:5px; align-items:center; }
+    .dot { height:7px; width:7px; border-radius:4px; background:rgba(155,77,114,0.2); transition:all .35s; }
+    .dot-on { width:22px; background:#9b4d72; }
+    .devo-body { flex:1; overflow-y:auto; padding:8px 18px 4px; position:relative; z-index:1; }
+    .devo-nav { display:flex; gap:10px; padding:10px 18px; padding-bottom:max(16px,env(safe-area-inset-bottom,16px)); flex-shrink:0; position:relative; z-index:1; }
+
+    .card { background:rgba(255,255,255,0.72); backdrop-filter:blur(12px); border-radius:22px; padding:20px 18px; border:1px solid rgba(155,77,114,0.15); margin-bottom:14px; }
+    .lbl { font-size:10px; letter-spacing:3px; text-transform:uppercase; margin-bottom:12px; }
+
+    .list-screen { overflow:hidden; }
+    .list-hdr { display:flex; align-items:center; justify-content:space-between; padding:14px 16px 8px; flex-shrink:0; position:relative; z-index:1; }
+    .list-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:400; color:#7a3f5a; }
+    .list-body { flex:1; overflow-y:auto; padding:8px 16px 16px; position:relative; z-index:1; }
+    .list-card { background:rgba(255,255,255,0.72); border-radius:18px; padding:16px; margin-bottom:12px; border:1px solid rgba(155,77,114,0.12); }
+    .list-p { font-family:'Cormorant Garamond',serif; font-size:20px; color:#7a3f5a; }
+    .list-d { font-size:11px; color:#b8957e; margin-top:2px; }
+    .empty { text-align:center; padding:60px 24px; color:#9b7a6a; font-size:15px; line-height:1.7; }
+
+    .cfg-card { background:rgba(255,255,255,0.72); border-radius:20px; padding:20px; margin-bottom:14px; border:1px solid rgba(155,77,114,0.12); }
+    .cfg-title { font-family:'Cormorant Garamond',serif; font-size:19px; color:#7a3f5a; margin-bottom:8px; }
+    .cfg-desc { font-size:13px; color:#7a5a4a; line-height:1.65; margin-bottom:14px; }
+
+    .toast { position:fixed; bottom:100px; left:50%; transform:translateX(-50%); background:rgba(50,30,40,0.9); color:white; padding:11px 22px; border-radius:50px; font-size:13px; white-space:nowrap; z-index:999; animation:toastIn .3s ease; }
+
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
+    @keyframes toastIn { from{opacity:0;transform:translate(-50%,10px)} to{opacity:1;transform:translate(-50%,0)} }
+    .fade-up { animation:fadeIn .5s ease; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes p0{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-20px) rotate(10deg)}}
+    @keyframes p1{0%,100%{transform:translateY(0)}50%{transform:translateY(-30px) rotate(-8deg)}}
+    @keyframes p2{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+    @keyframes p3{0%,100%{transform:translateY(0)}50%{transform:translateY(-25px) rotate(12deg)}}
+    @keyframes p4{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+    @keyframes p5{0%,100%{transform:translateY(0)}50%{transform:translateY(-22px) rotate(-6deg)}}
+    @keyframes p6{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
   </style>
 </head>
 <body>
-  <div id="app"></div>
-  <script type="module" src="/src/main.js"></script>
+<div id="app"></div>
+
+<script>
+const MONTHS = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+const DAYS = ["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
+const TEMAS = ["Identidade em Deus","Propósito","Cura interior","Fé que avança","Graça e recomeço","Força na fraqueza","Presença de Deus","Sonhos e espera","Coragem","Paz que transcende","Amor próprio em Cristo","Renovação da mente","Obediência","Florescer"];
+const PETALS = ["🌸","🌺","✨","🌷","💫","🌼","💕"];
+const PPOS = [[10,5],[30,88],[60,15],[80,75],[20,50],[70,92],[45,35]];
+const PDUR = [8,10,7,9,11,6,9];
+
+const today = new Date();
+const todayISO = today.toISOString().split('T')[0];
+const dateStr = `${DAYS[today.getDay()]}, ${today.getDate()} de ${MONTHS[today.getMonth()]}`;
+
+function getTema(d) {
+  const start = new Date(d.getFullYear(),0,1);
+  return TEMAS[Math.floor((d-start)/(7*864e5)) % TEMAS.length];
+}
+
+// Storage
+const db = {
+  getCached(k){ try{const a=JSON.parse(localStorage.getItem('fl_cache')||'{}');return a[k]||null;}catch{return null;}},
+  setCached(k,v){ try{const a=JSON.parse(localStorage.getItem('fl_cache')||'{}');const ks=Object.keys(a);if(ks.length>7)delete a[ks[0]];a[k]=v;localStorage.setItem('fl_cache',JSON.stringify(a));}catch{}},
+  getFavs(){ try{return JSON.parse(localStorage.getItem('fl_favs')||'[]');}catch{return[];} },
+  saveFav(devo,date){ const f=this.getFavs();if(f.find(x=>x.date===date))return f;const u=[{date,palavra:devo.palavra,tema:devo.tema,versiculo:devo.versiculo,referencia:devo.referencia,climax:devo.climax},...f].slice(0,50);localStorage.setItem('fl_favs',JSON.stringify(u));return u; },
+  removeFav(date){ const u=this.getFavs().filter(f=>f.date!==date);localStorage.setItem('fl_favs',JSON.stringify(u));return u; },
+  isFav(date){ return this.getFavs().some(f=>f.date===date); },
+  getHist(){ try{return JSON.parse(localStorage.getItem('fl_hist')||'[]');}catch{return[];} },
+  addHist(devo,date){ const h=this.getHist();if(h.find(x=>x.date===date))return h;const u=[{date,palavra:devo.palavra,tema:devo.tema,referencia:devo.referencia},...h].slice(0,90);localStorage.setItem('fl_hist',JSON.stringify(u));return u; },
+  getNotif(){ return localStorage.getItem('fl_notif')||'07:00'; },
+  setNotif(t){ localStorage.setItem('fl_notif',t); }
+};
+
+let S = {
+  screen:'home', page:0,
+  devo:null, loading:false, error:false,
+  isFav:db.isFav(todayISO),
+  favs:db.getFavs(), hist:db.getHist(),
+  notifTime:db.getNotif(), notifOn:false, toast:null
+};
+
+async function init() {
+  if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});
+  render();
+  const cached = db.getCached(todayISO);
+  if(cached){ S.devo=cached; db.addHist(cached,todayISO); S.hist=db.getHist(); render(); return; }
+  S.loading=true; render();
+  try {
+    const d = await gerarDevo(today);
+    S.devo=d; S.loading=false;
+    db.setCached(todayISO,d); db.addHist(d,todayISO); S.hist=db.getHist();
+  } catch { S.loading=false; S.error=true; }
+  render();
+}
+
+async function gerarDevo(date) {
+  const dayName = DAYS[date.getDay()];
+  const ds = `${dayName}, ${date.getDate()} de ${MONTHS[date.getMonth()]} de ${date.getFullYear()}`;
+  const tema = getTema(date);
+  const prompt = `Você é uma voz devocional feminina carinhosa para mulheres brasileiras de fé. Tom acolhedor e ativador. Chame sempre de "florzinha". Hoje é ${ds}. Tema: "${tema}". Responda APENAS em JSON válido sem markdown:\n{"palavra":"1-2 palavras impactantes","tema":"${tema}","referencia":"Livro cap:v","versiculo":"texto completo","frase_central":"frase forte 1-2 linhas","reflexao":"3-4 frases acolhedoras falando com ela","pergunta":"pergunta confrontadora poderosa","verdade":"3-4 frases do que Deus diz sobre ela","virada":"2-3 frases que mudam a perspectiva","aplicacao":["ação 1","ação 2","ação 3"],"climax":"declaração final poderosa","oracao":"oração curta 2-3 frases"}`;
+  const res = await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:"Escreva devocionais femininos cristãos em português brasileiro. Responda APENAS com JSON válido.",messages:[{role:"user",content:prompt}]})});
+  const data = await res.json();
+  const text = data.content?.filter(b=>b.type==="text").map(b=>b.text).join("")||"";
+  return JSON.parse(text.replace(/```json|```/g,"").trim());
+}
+
+function go(s){ S.screen=s; S.page=0; render(); }
+function nxt(){ if(S.page<4){S.page++;render();} }
+function prv(){ if(S.page>0){S.page--;render();} }
+function retry(){ S.error=false; init(); }
+
+function togFav(){
+  if(S.isFav){db.removeFav(todayISO);S.isFav=false;toast('Removido dos favoritos');}
+  else{db.saveFav(S.devo,todayISO);S.isFav=true;toast('Salvo nos favoritos 🌸');}
+  S.favs=db.getFavs();render();
+}
+async function shareIt(){
+  const d=S.devo;if(!d)return;
+  const text=`🌸 *${d.palavra}* — ${dateStr}\n\n"${d.versiculo}"\n— ${d.referencia}\n\n${d.climax}\n\n@minhacasinhainterior #Florescendo`;
+  if(navigator.share){try{await navigator.share({title:'Florescendo',text});}catch{}}
+  else if(navigator.clipboard){await navigator.clipboard.writeText(text);toast('Copiado! ✨');}
+}
+async function reqNotif(){
+  if(!('Notification'in window)){toast('Seu navegador não suporta notificações');return;}
+  const p=await Notification.requestPermission();
+  if(p==='granted'){S.notifOn=true;schedNotif();toast('Notificações ativadas! 🌸');}
+  else toast('Permissão negada.');render();
+}
+function schedNotif(){
+  const [h,m]=S.notifTime.split(':').map(Number);
+  const now=new Date(),next=new Date();
+  next.setHours(h,m,0,0);if(next<=now)next.setDate(next.getDate()+1);
+  setTimeout(()=>{if(Notification.permission==='granted')new Notification('Florescendo 🌸',{body:'Sua palavra de hoje está esperando, florzinha 💕',icon:'/icon-192.png'});schedNotif();},next-now);
+}
+function toast(msg){S.toast=msg;render();setTimeout(()=>{S.toast=null;render();},2500);}
+function fmtDate(iso){const[y,m,d]=iso.split('-');return`${d}/${m}/${y}`;}
+function rmFav(date){db.removeFav(date);if(date===todayISO)S.isFav=false;S.favs=db.getFavs();render();}
+function updNotif(t){S.notifTime=t;db.setNotif(t);if(S.notifOn){schedNotif();toast('Horário atualizado! ✨');}render();}
+
+function petals(dark=false){
+  return PETALS.map((p,i)=>`<span style="position:fixed;font-size:${[18,22,14,20,16,24,18][i]}px;opacity:${dark?.1:.13};top:${PPOS[i][0]}%;left:${PPOS[i][1]}%;animation:p${i} ${PDUR[i]}s ease-in-out infinite;animation-delay:${i*1.2}s;pointer-events:none;z-index:0">${p}</span>`).join('');
+}
+
+function bnav(active){
+  const items=[{id:'home',ic:'🏠',lb:'Início'},{id:'favs',ic:'🤍',lb:'Favoritos'},{id:'hist',ic:'📖',lb:'Histórico'},{id:'cfg',ic:'⚙️',lb:'Config.'}];
+  return`<nav class="bottom-nav">${items.map(i=>`<button class="nav-btn${i.id===active?' nav-on':''}" onclick="go('${i.id}')"><span>${i.ic}</span><span>${i.lb}</span></button>`).join('')}</nav>`;
+}
+
+function renderHome(){
+  const tema=getTema(today);
+  return`<div class="screen" style="background:linear-gradient(160deg,#fdf6f0,#fce8d8 45%,#f5d5e8)">${petals()}
+    <div class="band"></div>
+    <div class="home-header"><div class="brand">Florescendo</div><div class="subbrand">Seu devocional diário para florescer com fé</div></div>
+    <div class="home-hero">
+      ${S.loading?`<div style="text-align:center"><div style="font-size:52px;margin-bottom:16px;animation:pulse 1.5s ease-in-out infinite">🌸</div><div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:#9b4d72;margin-bottom:8px">Preparando sua palavra...</div><div style="font-size:13px;color:#b8957e;line-height:1.6">A IA está escrevendo especialmente<br>para você, florzinha 💕</div></div>`:
+      S.error?`<div style="text-align:center"><div style="font-size:44px;margin-bottom:12px">🙏</div><p style="color:#9b4d72;margin-bottom:20px;font-size:14px;line-height:1.6">Não consegui carregar o devocional.<br>Verifique sua internet.</p><button class="btn-main" onclick="retry()" style="background:linear-gradient(135deg,#9b4d72,#c4836a)">Tentar novamente 🌸</button></div>`:
+      `<div style="font-size:58px;animation:float 3s ease-in-out infinite;margin-bottom:12px">🌸</div>
+      <div style="font-size:10px;letter-spacing:3px;color:#c4836a;text-transform:uppercase;margin-bottom:6px">A palavra de hoje</div>
+      <h1 class="hero-p" style="background:linear-gradient(135deg,#9b4d72,#c4836a,#e8a87c);-webkit-background-clip:text;-webkit-text-fill-color:transparent">${S.devo?.palavra||'...'}</h1>
+      <div style="font-size:12px;color:#9b7a6a;letter-spacing:1px;margin-bottom:4px">${tema}</div>
+      <div style="font-size:11px;color:#b8957e;margin-bottom:20px">${dateStr}</div>
+      <div style="width:44px;height:2px;background:linear-gradient(90deg,#e8a4c4,#f4b896);border-radius:2px;margin:0 auto 24px;opacity:.7"></div>
+      <button class="btn-main" onclick="go('devo')" style="background:linear-gradient(135deg,#9b4d72,#c4836a)">Abrir devocional de hoje 🌸</button>`}
+    </div>${bnav('home')}</div>`;
+}
+
+function renderDevo(){
+  if(!S.devo){go('home');return'';}
+  const d=S.devo, p=S.page;
+  const bgs=['linear-gradient(160deg,#fdf6f0,#fce8d8,#f5d5e8)','linear-gradient(160deg,#f8f0fd,#ede0f8,#f5d5e8)','linear-gradient(160deg,#fff8e8,#fce8c8,#f5e0d0)','linear-gradient(160deg,#f0f8f4,#e0f0e8,#d8ece0)','linear-gradient(135deg,#9b4d72,#c4836a,#e8a87c)'];
+  const isDark=p===4;
+  const dots=[0,1,2,3,4].map(i=>`<div class="dot${i===p?' dot-on':''}"></div>`).join('');
+  const btnLbls=['Começar 🌸','Aprofundar →','Continuar →','A virada →',''];
+
+  let b1='',b2='';
+  if(p===0){
+    b1=`<div style="text-align:center;margin-bottom:20px"><div style="font-size:52px;animation:float 3s ease-in-out infinite;margin-bottom:8px">🌸</div><div style="font-size:9px;letter-spacing:3px;color:#c4836a;text-transform:uppercase;margin-bottom:4px">A palavra de hoje</div><div style="font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:300;background:linear-gradient(135deg,#9b4d72,#c4836a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-1px">${d.palavra}</div><div style="font-size:11px;color:#9b7a6a;margin-top:4px">${d.tema}</div></div>`;
+    b2=`<div class="card"><div class="lbl" style="color:#9b4d72">📖 Versículo do dia</div><p style="font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;line-height:1.75;color:#3a2050;margin-bottom:10px">"${d.versiculo}"</p><div style="font-size:12px;font-weight:600;text-align:right;color:#9b4d72">— ${d.referencia}</div></div>`;
+  } else if(p===1){
+    b1=`<div class="card" style="background:rgba(155,77,114,0.07);border-color:rgba(155,77,114,0.2);text-align:center;margin-bottom:14px"><div class="lbl" style="color:#9b4d72">✨ A verdade de hoje</div><p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;font-style:italic;line-height:1.55;color:#7a3f5a">${d.frase_central}</p></div>`;
+    b2=`<div class="card"><div class="lbl" style="color:#c4836a">🌷 Reflexão</div><p style="font-size:14px;line-height:1.85;color:#4a3030">${d.reflexao}</p></div>`;
+  } else if(p===2){
+    b1=`<div class="card" style="background:rgba(232,168,124,0.1);border-color:rgba(196,131,106,0.25);text-align:center;margin-bottom:14px"><div class="lbl" style="color:#c4836a">🔥 Uma pergunta para você</div><p style="font-family:'Cormorant Garamond',serif;font-size:20px;line-height:1.55;color:#7a5a20">${d.pergunta}</p></div>`;
+    b2=`<div class="card"><div class="lbl" style="color:#9b4d72">📖 O que Deus diz sobre você</div><p style="font-size:14px;line-height:1.85;color:#4a3030">${d.verdade}</p></div>`;
+  } else if(p===3){
+    b1=`<div class="card" style="border-color:rgba(74,138,90,0.25);margin-bottom:14px"><div class="lbl" style="color:#4a8a5a">🌅 A virada</div><p style="font-size:14px;line-height:1.85;color:#2a4a32;margin-bottom:12px">${d.virada}</p><p style="font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:#4a8a5a;font-weight:600">${d.climax}</p></div>`;
+    const items=Array.isArray(d.aplicacao)?d.aplicacao:[d.aplicacao];
+    b2=`<div class="card"><div class="lbl" style="color:#4a8a5a">🎯 Para hoje</div>${items.map((a,i)=>`<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;font-size:13px;color:#2a4a32;line-height:1.6"><span style="background:linear-gradient(135deg,#4a8a5a,#7ab07a);color:white;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px">${i+1}</span><span>${a}</span></div>`).join('')}</div>`;
+  } else if(p===4){
+    b1=`<div style="text-align:center;margin-bottom:20px"><div style="font-size:44px;animation:pulse 2s ease-in-out infinite;margin-bottom:12px">✨</div><div style="font-size:9px;letter-spacing:3px;color:rgba(255,255,255,0.7);text-transform:uppercase;margin-bottom:12px">Declare hoje</div><p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;line-height:1.55;color:white;text-shadow:0 2px 12px rgba(0,0,0,0.15)">${d.climax}</p></div>`;
+    b2=`<div style="background:rgba(255,255,255,0.15);border-radius:20px;padding:18px 20px;border:1px solid rgba(255,255,255,0.25)"><div style="font-size:9px;letter-spacing:3px;color:rgba(255,255,255,0.7);text-transform:uppercase;margin-bottom:12px">🙏 Oração</div><p style="font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;line-height:1.75;color:white;margin-bottom:16px">${d.oracao}</p><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"><button class="btn-ghost" onclick="togFav()">${S.isFav?'❤️ Salvo':'🤍 Salvar'}</button><button class="btn-ghost" onclick="shareIt()">📤 Compartilhar</button></div></div>`;
+  }
+
+  return`<div class="screen" style="background:${bgs[p]};transition:background .5s">${petals(isDark)}
+    <div class="band"></div>
+    <div class="devo-bar"><button class="icon-btn" onclick="go('home')" style="${isDark?'color:white':''}">←</button><div class="dots-row">${dots}</div><button class="icon-btn" onclick="togFav()" style="${isDark?'color:white':''}">${S.isFav?'❤️':'🤍'}</button></div>
+    <div class="devo-body fade-up">${b1}${b2}</div>
+    <div class="devo-nav">
+      ${p>0?`<button class="btn-back${isDark?' btn-back-w':''}" onclick="prv()">← Voltar</button>`:''}
+      ${p<4?`<button class="btn-main" onclick="nxt()" style="background:linear-gradient(135deg,#9b4d72,#c4836a);flex:1">${btnLbls[p]}</button>`:''}
+      ${p===4?`<button class="btn-main" onclick="go('home')" style="background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.5);flex:1">Voltar ao início 🌷</button>`:''}
+    </div></div>`;
+}
+
+function renderFavs(){
+  const favs=S.favs;
+  return`<div class="screen list-screen" style="background:linear-gradient(160deg,#fdf6f0,#fce8d8)">${petals()}
+    <div class="band"></div>
+    <div class="list-hdr"><button class="icon-btn" onclick="go('home')">←</button><h2 class="list-title">Favoritos</h2><div style="width:40px"></div></div>
+    <div class="list-body">
+      ${favs.length===0?`<div class="empty"><div style="font-size:48px;margin-bottom:12px">🤍</div><p>Nenhum favorito ainda.</p><p style="font-size:12px;margin-top:8px;opacity:.7">No final do devocional, toque em "Salvar".</p></div>`
+      :favs.map(f=>`<div class="list-card"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px"><div><div class="list-p">${f.palavra}</div><div class="list-d">${f.tema||''} · ${fmtDate(f.date)}</div></div><button class="icon-btn" style="font-size:16px;width:32px;height:32px" onclick="rmFav('${f.date}')">🗑</button></div>${f.versiculo?`<p style="font-size:12px;color:#5a3a2a;line-height:1.6;font-style:italic;margin-bottom:6px">"${f.versiculo}"</p>`:''}<div style="font-size:11px;color:#9b4d72;font-weight:600">— ${f.referencia||''}</div></div>`).join('')}
+    </div>${bnav('favs')}</div>`;
+}
+
+function renderHist(){
+  const hist=S.hist;
+  return`<div class="screen list-screen" style="background:linear-gradient(160deg,#f0f8f4,#e8f4ec)">${petals()}
+    <div class="band"></div>
+    <div class="list-hdr"><button class="icon-btn" onclick="go('home')">←</button><h2 class="list-title">Histórico</h2><div style="width:40px"></div></div>
+    <div class="list-body">
+      ${hist.length===0?`<div class="empty"><div style="font-size:48px;margin-bottom:12px">📖</div><p>Nenhuma leitura ainda.</p></div>`
+      :hist.map(h=>`<div class="list-card" style="display:flex;align-items:center;gap:14px"><div style="width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,#9b4d72,#c4836a);flex-shrink:0"></div><div><div class="list-p">${h.palavra}</div><div class="list-d">${h.tema||''}</div><div style="font-size:10px;color:#9b4d72;margin-top:2px">${fmtDate(h.date)}</div></div></div>`).join('')}
+    </div>${bnav('hist')}</div>`;
+}
+
+function renderCfg(){
+  return`<div class="screen list-screen" style="background:linear-gradient(160deg,#fdf6f0,#f5d5e8)">${petals()}
+    <div class="band"></div>
+    <div class="list-hdr"><button class="icon-btn" onclick="go('home')">←</button><h2 class="list-title">Configurações</h2><div style="width:40px"></div></div>
+    <div class="list-body">
+      <div class="cfg-card">
+        <div class="cfg-title">🔔 Lembrete Diário</div>
+        <p class="cfg-desc">Receba um lembrete toda manhã para abrir seu devocional 🌸</p>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <span style="font-size:14px;color:#5a3a2a">Horário</span>
+          <input type="time" style="border:1.5px solid rgba(155,77,114,0.3);border-radius:10px;padding:7px 12px;font-size:14px;color:#7a3f5a;background:white;outline:none" value="${S.notifTime}" onchange="updNotif(this.value)" />
+        </div>
+        <button class="btn-main" onclick="reqNotif()" style="background:linear-gradient(135deg,#9b4d72,#c4836a);width:100%;padding:12px">${S.notifOn?'✅ Notificações ativas':'🔔 Ativar notificações'}</button>
+      </div>
+      <div class="cfg-card">
+        <div class="cfg-title">📲 Instalar no celular</div>
+        <p class="cfg-desc">Salve na tela inicial para acessar como um app:</p>
+        <div style="font-size:13px;color:#5a3a2a;display:flex;gap:8px;margin-bottom:8px"><span style="color:#9b4d72;font-weight:600">1.</span> Toque no botão compartilhar do navegador</div>
+        <div style="font-size:13px;color:#5a3a2a;display:flex;gap:8px;margin-bottom:8px"><span style="color:#9b4d72;font-weight:600">2.</span> Selecione "Adicionar à Tela de Início"</div>
+        <div style="font-size:13px;color:#5a3a2a;display:flex;gap:8px"><span style="color:#9b4d72;font-weight:600">3.</span> Confirme e pronto! 🌸</div>
+      </div>
+      <div class="cfg-card">
+        <div class="cfg-title">💕 Sobre</div>
+        <p class="cfg-desc">Feito com amor por <strong>@minhacasinhainterior</strong> para cada florzinha que quer florescer com fé todos os dias.</p>
+      </div>
+    </div>${bnav('cfg')}</div>`;
+}
+
+function render(){
+  const app=document.getElementById('app');
+  let html='';
+  if(S.screen==='home') html=renderHome();
+  else if(S.screen==='devo') html=renderDevo();
+  else if(S.screen==='favs') html=renderFavs();
+  else if(S.screen==='hist') html=renderHist();
+  else if(S.screen==='cfg') html=renderCfg();
+  if(S.toast) html+=`<div class="toast">${S.toast}</div>`;
+  app.innerHTML=html;
+}
+
+init();
+</script>
 </body>
 </html>
