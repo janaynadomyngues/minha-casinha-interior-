@@ -1,766 +1,498 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
-<meta name="theme-color" content="#7a3f5a"/>
-<meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
-<meta name="apple-mobile-web-app-title" content="Florescendo"/>
-<link rel="manifest" href="manifest.json"/>
-<title>Florescendo 🌸</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap" rel="stylesheet"/>
-<style>
-  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-  :root{
-    --rose:#7a3f5a;
-    --peach:#c4836a;
-    --bg1:#fdf6f0;
-    --bg2:#faeae0;
-    --bg3:#f5dce8;
-    --text-dark:#4a2a3a;
-    --text-mid:#7a5a4a;
-    --text-light:#b8957e;
-    --petal:#d4a0b0;
-    --cf:'Cormorant Garamond',Georgia,serif;
-    --grad:linear-gradient(135deg,#7a3f5a,#c4836a);
-    --band:linear-gradient(90deg,#e8a4c4,#f4b896,#e8d5a3,#a8c8b0,#e8a4c4);
-  }
-  html,body{height:100%;overflow:hidden;background:var(--bg1);font-family:var(--cf);}
-  #app{height:100vh;display:flex;flex-direction:column;overflow:hidden;position:relative;}
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+  <meta name="theme-color" content="#9b4d72"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+  <meta name="apple-mobile-web-app-title" content="Florescendo"/>
+  <meta name="description" content="Seu devocional diário para florescer com fé."/>
+  <title>Florescendo 🌸</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Lato:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body,#app{height:100%;overflow:hidden}
+    body{font-family:'Lato',sans-serif;background:#f5ece8}
+    .screen{height:100vh;display:flex;flex-direction:column;overflow:hidden;position:relative}
+    .band{width:100%;height:5px;flex-shrink:0;background:linear-gradient(90deg,#e8a4c4,#f4b896,#e8d5a3,#a8c8b0,#e8a4c4)}
 
-  /* Screens */
-  .screen{height:100%;display:flex;flex-direction:column;overflow:hidden;position:absolute;inset:0;transition:opacity .25s ease,transform .25s ease;}
-  .screen.hidden{opacity:0;pointer-events:none;transform:translateY(8px);}
+    /* Petals */
+    .petal{position:fixed;pointer-events:none;z-index:0;filter:drop-shadow(0 2px 4px rgba(200,100,150,0.3))}
+    @keyframes fp0{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-22px) rotate(12deg)}}
+    @keyframes fp1{0%,100%{transform:translateY(0)}50%{transform:translateY(-30px) rotate(-10deg)}}
+    @keyframes fp2{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+    @keyframes fp3{0%,100%{transform:translateY(0)}50%{transform:translateY(-26px) rotate(15deg)}}
+    @keyframes fp4{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+    @keyframes fp5{0%,100%{transform:translateY(0)}50%{transform:translateY(-24px) rotate(-8deg)}}
+    @keyframes fp6{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+    @keyframes fp7{0%,100%{transform:translateY(0)}50%{transform:translateY(-28px) rotate(10deg)}}
+    @keyframes flt{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes toastIn{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+    @keyframes dotP{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:1;transform:scale(1.4)}}
+    .fade-in{animation:fadeIn .5s ease}
 
-  /* Band */
-  .band{width:100%;height:5px;flex-shrink:0;background:var(--band);}
+    /* Buttons */
+    .btn-main{border:none;border-radius:50px;padding:15px 36px;color:white;font-family:'Cormorant Garamond',serif;font-size:18px;letter-spacing:.5px;cursor:pointer;background:linear-gradient(135deg,#7a3f5a,#c4836a);box-shadow:0 4px 20px rgba(122,63,90,.3);transition:transform .15s}
+    .btn-main:active{transform:scale(.97)}
+    .btn-sec{background:transparent;border:1px solid rgba(122,63,90,.3);border-radius:50px;padding:13px 16px;color:#7a3f5a;font-family:'Cormorant Garamond',serif;font-size:15px;cursor:pointer}
+    .icon-btn{background:transparent;border:none;font-size:22px;cursor:pointer;padding:8px;width:42px;height:42px;display:flex;align-items:center;justify-content:center}
 
-  /* Petals */
-  .petals{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
-  .petal{position:absolute;filter:drop-shadow(0 2px 4px rgba(200,100,150,.35));}
+    /* Nav */
+    .bottom-nav{display:flex;border-top:1px solid rgba(122,63,90,.1);background:rgba(253,246,240,.97);backdrop-filter:blur(12px);flex-shrink:0;padding-bottom:env(safe-area-inset-bottom,0px)}
+    .nav-btn{flex:1;background:transparent;border:none;padding:10px 4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:#b8957e;font-family:'Lato',sans-serif}
+    .nav-btn span:first-child{font-size:20px}
+    .nav-on{color:#7a3f5a}
 
-  @keyframes fp0{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-22px) rotate(12deg)}}
-  @keyframes fp1{0%,100%{transform:translateY(0)}50%{transform:translateY(-30px) rotate(-10deg)}}
-  @keyframes fp2{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
-  @keyframes fp3{0%,100%{transform:translateY(0)}50%{transform:translateY(-26px) rotate(15deg)}}
-  @keyframes fp4{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
-  @keyframes fp5{0%,100%{transform:translateY(0)}50%{transform:translateY(-24px) rotate(-8deg)}}
-  @keyframes fp6{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
-  @keyframes fp7{0%,100%{transform:translateY(0)}50%{transform:translateY(-28px) rotate(10deg)}}
-  @keyframes flt{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    /* Devocional */
+    .devo-topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;flex-shrink:0;background:rgba(253,246,240,.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(122,63,90,.08)}
+    .devo-scroll{flex:1;overflow-y:auto}
+    .devo-actions{display:flex;gap:10px;padding:12px 16px;padding-bottom:max(12px,env(safe-area-inset-bottom,12px));flex-shrink:0;background:rgba(253,246,240,.95);border-top:1px solid rgba(122,63,90,.08)}
 
-  /* Bottom Nav */
-  .bottom-nav{display:flex;border-top:1px solid rgba(122,63,90,.1);background:rgba(253,246,240,.97);flex-shrink:0;z-index:10;}
-  .nav-btn{flex:1;background:transparent;border:none;padding:10px 4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;font-family:Lato,sans-serif;color:var(--text-light);transition:color .2s;}
-  .nav-btn.active{color:var(--rose);}
-  .nav-btn span.ic{font-size:20px;}
+    /* Sections */
+    .sec{padding:18px 22px;border-top:1px solid rgba(122,63,90,.07)}
+    .body-text{font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.85;color:#4a3030;text-align:center}
+    .impact{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:500;line-height:1.6;color:#7a3f5a;font-style:italic;text-align:center}
+    .list-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#9b7a6a;margin-bottom:12px;text-align:center}
+    .flor-div{text-align:center;color:#d4a0b0;font-size:16px;opacity:.8;margin-bottom:12px}
+    .devo-list{list-style:none;padding:0}
+    .devo-list li{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:#5a3a4a;line-height:1.5}
+    .devo-list li::before{content:'❋';color:#d4a0b0;flex-shrink:0;font-size:12px;margin-top:4px}
+    .card-white{background:rgba(255,255,255,.65);border-radius:14px;padding:20px 22px;border:1px solid rgba(122,63,90,.1)}
+    .card-soft{background:linear-gradient(135deg,rgba(122,63,90,.08),rgba(196,131,106,.08));border-radius:14px;padding:18px 20px;border:1px solid rgba(122,63,90,.12)}
+    .card-dark{background:linear-gradient(135deg,#7a3f5a,#9a5a6a);border-radius:14px;padding:22px;text-align:center}
 
-  /* Toast */
-  .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(50,30,40,.92);color:white;padding:11px 22px;border-radius:50px;font-size:13px;white-space:nowrap;z-index:999;animation:fadeIn .3s ease;pointer-events:none;}
+    /* List screens */
+    .list-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 8px;flex-shrink:0}
+    .list-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:#7a3f5a}
+    .list-body{flex:1;overflow-y:auto;padding:8px 16px 16px}
+    .list-card{background:rgba(255,255,255,.72);border-radius:18px;padding:16px;margin-bottom:12px;border:1px solid rgba(122,63,90,.12)}
+    .empty{text-align:center;padding:60px 24px;color:#9b7a6a;font-size:15px;line-height:1.7}
+    .cfg-card{background:rgba(255,255,255,.72);border-radius:20px;padding:20px;margin-bottom:14px;border:1px solid rgba(122,63,90,.12)}
+    .cfg-title{font-family:'Cormorant Garamond',serif;font-size:19px;color:#7a3f5a;margin-bottom:8px}
+    .cfg-desc{font-size:13px;color:#7a5a4a;line-height:1.65;margin-bottom:14px}
 
-  /* Cards */
-  .card{background:rgba(255,255,255,.72);border-radius:20px;padding:20px;margin-bottom:14px;border:1px solid rgba(122,63,90,.12);animation:fadeIn .4s ease;}
+    .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(50,30,40,.92);color:white;padding:11px 22px;border-radius:50px;font-size:13px;white-space:nowrap;z-index:999;animation:toastIn .3s ease;backdrop-filter:blur(8px)}
+    .loading-dots{display:flex;gap:6px;justify-content:center;margin-top:20px}
+    .loading-dot{width:7px;height:7px;border-radius:50%;background:#d4a0b0;animation:dotP 1.5s ease-in-out infinite}
+    .loading-dot:nth-child(2){animation-delay:.2s}
+    .loading-dot:nth-child(3){animation-delay:.4s}
 
-  /* Buttons */
-  .btn-primary{border:none;border-radius:50px;padding:15px 36px;color:white;font-family:var(--cf);font-size:18px;letter-spacing:.5px;cursor:pointer;background:var(--grad);box-shadow:0 4px 20px rgba(122,63,90,.3);}
-  .btn-ghost{background:transparent;border:1px solid rgba(122,63,90,.3);border-radius:50px;padding:11px;color:#9b4d72;font-family:var(--cf);font-size:14px;cursor:pointer;width:100%;}
-
-  /* Sections */
-  .sec{padding:18px 22px;border-top:1px solid rgba(122,63,90,.07);}
-  .btext{font-family:var(--cf);font-size:17px;line-height:1.85;color:#4a3030;text-align:center;}
-  .btext.italic{font-style:italic;}
-  .list-title{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#9b7a6a;margin-bottom:12px;text-align:center;}
-  .floral-div{text-align:center;color:var(--petal);margin-bottom:12px;font-size:16px;opacity:.8;}
-  .dlist{list-style:none;padding:0;}
-  .dlist li{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-family:var(--cf);font-size:16px;font-style:italic;color:#5a3a4a;line-height:1.5;}
-  .dlist li::before{content:"❋";color:var(--petal);flex-shrink:0;font-size:12px;margin-top:4px;}
-
-  /* Loading spinner */
-  .spinner{width:36px;height:36px;border:3px solid rgba(122,63,90,.2);border-top-color:#7a3f5a;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto;}
-
-  /* Divider */
-  .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(212,160,176,.5),transparent);margin:6px 0;}
-
-  /* Textarea */
-  textarea{width:100%;min-height:120px;border-radius:16px;border:1px solid rgba(122,63,90,.2);padding:16px;font-family:var(--cf);font-size:15px;line-height:1.7;color:#4a3030;background:rgba(255,255,255,.7);outline:none;resize:none;box-shadow:inset 0 2px 8px rgba(122,63,90,.05);}
-  textarea:focus{border-color:rgba(122,63,90,.4);}
-
-  /* Scrollable content area */
-  .scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
-
-  /* Impact quote box */
-  .impact-box{background:linear-gradient(135deg,rgba(122,63,90,.08),rgba(196,131,106,.08));border-radius:14px;padding:18px 20px;border:1px solid rgba(122,63,90,.12);text-align:center;}
-  .dark-box{background:linear-gradient(135deg,#7a3f5a,#9a5a6a);border-radius:14px;padding:22px;text-align:center;}
-
-  /* Header bar */
-  .header-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;flex-shrink:0;background:rgba(253,246,240,.92);border-bottom:1px solid rgba(122,63,90,.08);}
-  .back-btn{background:transparent;border:none;font-size:22px;cursor:pointer;color:var(--rose);padding:8px;}
-  .header-title{font-family:var(--cf);font-size:15px;color:var(--rose);letter-spacing:2px;text-transform:uppercase;}
-  .fav-btn{background:transparent;border:none;font-size:20px;cursor:pointer;padding:8px;}
-</style>
+    /* Diary */
+    .diary-card{background:rgba(255,255,255,.72);border-radius:20px;padding:20px;margin-bottom:14px;border:1px solid rgba(122,63,90,.12)}
+    .diary-palavra{font-family:'Cormorant Garamond',serif;font-size:20px;color:#7a3f5a}
+    .diary-date{font-size:10px;color:#b8957e;margin-top:2px;letter-spacing:1px}
+    .diary-divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(212,160,176,.4),transparent);margin:10px 0}
+    .diary-texto{font-family:'Cormorant Garamond',serif;font-size:15px;line-height:1.8;color:#4a3030;font-style:italic}
+    textarea{width:100%;min-height:120px;border-radius:16px;border:1px solid rgba(122,63,90,.2);padding:16px;font-family:'Cormorant Garamond',serif;font-size:15px;line-height:1.7;color:#4a3030;background:rgba(255,255,255,.7);outline:none;resize:none;box-shadow:inset 0 2px 8px rgba(122,63,90,.05)}
+  </style>
 </head>
 <body>
-<div id="app">
-
-  <!-- ── PETALS (global) ── -->
-  <div class="petals" id="petals"></div>
-
-  <!-- ── TOAST ── -->
-  <div class="toast" id="toast" style="display:none"></div>
-
-  <!-- ══════════════════════════════════════════════
-       SCREEN: HOME
-  ══════════════════════════════════════════════ -->
-  <div class="screen" id="screen-home" style="background:linear-gradient(170deg,#fdf6f0,#faeae0 40%,#f5dce8);">
-    <div class="petals-local"></div>
-    <div class="band"></div>
-    <div style="text-align:center;padding:22px 24px 4px;position:relative;z-index:1;">
-      <div style="font-family:var(--cf);font-size:24px;font-weight:300;letter-spacing:6px;text-transform:uppercase;color:var(--rose);">Florescendo</div>
-      <div style="font-family:var(--cf);font-size:13px;font-style:italic;color:var(--text-light);margin-top:4px;">Seu devocional diário para florescer com fé</div>
-      <div style="width:44px;height:1px;background:linear-gradient(90deg,var(--petal),#e8b896);margin:8px auto 0;opacity:.7;"></div>
-    </div>
-    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 32px 16px;text-align:center;position:relative;z-index:1;">
-      <div style="font-size:58px;margin-bottom:14px;animation:flt 3s ease-in-out infinite;">🌸</div>
-      <div style="font-size:10px;letter-spacing:4px;color:var(--peach);text-transform:uppercase;margin-bottom:8px;">A palavra de hoje</div>
-      <div id="home-palavra" style="font-family:var(--cf);font-size:54px;font-weight:300;letter-spacing:-1px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px;">...</div>
-      <div id="home-date" style="font-size:12px;color:var(--text-light);letter-spacing:1px;margin-bottom:22px;"></div>
-      <div style="width:40px;height:1px;background:linear-gradient(90deg,var(--petal),#e8b896);margin:0 auto 22px;opacity:.6;"></div>
-      <button class="btn-primary" onclick="openDevo()">Abrir devocional de hoje 🌸</button>
-    </div>
-    <nav class="bottom-nav">
-      <button class="nav-btn active" onclick="goTo('home')" id="nav-home"><span class="ic">🏠</span><span>Início</span></button>
-      <button class="nav-btn" onclick="goTo('diario')" id="nav-diario"><span class="ic">📖</span><span>Diário</span></button>
-      <button class="nav-btn" onclick="goTo('favs')" id="nav-favs"><span class="ic">🤍</span><span>Favoritos</span></button>
-      <button class="nav-btn" onclick="goTo('cfg')" id="nav-cfg"><span class="ic">⚙️</span><span>Config.</span></button>
-    </nav>
-  </div>
-
-  <!-- ══════════════════════════════════════════════
-       SCREEN: DEVOCIONAL
-  ══════════════════════════════════════════════ -->
-  <div class="screen hidden" id="screen-devo" style="background:linear-gradient(170deg,#fdf6f0,#f5ece8);">
-    <div class="band"></div>
-    <div class="header-bar">
-      <button class="back-btn" onclick="goTo('home')">←</button>
-      <div class="header-title">Florescendo</div>
-      <button class="fav-btn" id="fav-btn" onclick="toggleFav()">🤍</button>
-    </div>
-    <div class="scroll-area" id="devo-content">
-      <!-- Loading state -->
-      <div id="devo-loading" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;gap:16px;">
-        <div class="spinner"></div>
-        <div style="font-family:var(--cf);font-size:16px;font-style:italic;color:var(--text-light);animation:pulse 1.5s ease infinite;">Preparando seu devocional...</div>
-        <div style="font-size:24px;animation:flt 2s ease-in-out infinite;">🌸</div>
-      </div>
-      <!-- Content (injected by JS) -->
-      <div id="devo-body" style="display:none;"></div>
-    </div>
-    <!-- Bottom buttons -->
-    <div style="display:flex;gap:10px;padding:12px 16px;flex-shrink:0;background:rgba(253,246,240,.95);border-top:1px solid rgba(122,63,90,.08);">
-      <button onclick="toggleFavBtn()" id="save-btn" style="flex:1;background:transparent;border:1px solid rgba(122,63,90,.3);border-radius:50px;padding:13px 16px;color:var(--rose);font-family:var(--cf);font-size:15px;cursor:pointer;">🤍 Salvar</button>
-      <button onclick="shareWhatsApp()" style="flex:1;border:none;border-radius:50px;padding:13px 16px;color:white;background:#25D366;font-family:var(--cf);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        WhatsApp
-      </button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════════
-       SCREEN: DIÁRIO ESPIRITUAL
-  ══════════════════════════════════════════════ -->
-  <div class="screen hidden" id="screen-diario" style="background:linear-gradient(170deg,#fdf6f0,#faeae0 40%,#f5dce8);">
-    <div class="band"></div>
-    <div style="text-align:center;padding:18px 16px 8px;position:relative;z-index:1;">
-      <div style="font-size:28px;margin-bottom:6px;">📖</div>
-      <div style="font-family:var(--cf);font-size:22px;font-weight:400;color:var(--rose);">Diário Espiritual</div>
-      <div style="font-family:var(--cf);font-size:12px;font-style:italic;color:var(--text-light);margin-top:3px;">Suas anotações com Deus 🌸</div>
-      <div style="width:36px;height:1px;background:linear-gradient(90deg,var(--petal),#e8b896);margin:8px auto 0;opacity:.7;"></div>
-    </div>
-    <div class="scroll-area" style="padding:8px 16px 16px;position:relative;z-index:1;" id="diario-list">
-    </div>
-    <nav class="bottom-nav">
-      <button class="nav-btn" onclick="goTo('home')" id="nav2-home"><span class="ic">🏠</span><span>Início</span></button>
-      <button class="nav-btn active" onclick="goTo('diario')" id="nav2-diario"><span class="ic">📖</span><span>Diário</span></button>
-      <button class="nav-btn" onclick="goTo('favs')" id="nav2-favs"><span class="ic">🤍</span><span>Favoritos</span></button>
-      <button class="nav-btn" onclick="goTo('cfg')" id="nav2-cfg"><span class="ic">⚙️</span><span>Config.</span></button>
-    </nav>
-  </div>
-
-  <!-- ══════════════════════════════════════════════
-       SCREEN: FAVORITOS
-  ══════════════════════════════════════════════ -->
-  <div class="screen hidden" id="screen-favs" style="background:linear-gradient(160deg,#fdf6f0,#faeae0);">
-    <div class="band"></div>
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px 8px;flex-shrink:0;">
-      <button class="back-btn" onclick="goTo('home')">←</button>
-      <h2 style="font-family:var(--cf);font-size:22px;font-weight:400;color:var(--rose);">Favoritos</h2>
-      <div style="width:40px;"></div>
-    </div>
-    <div class="scroll-area" style="padding:8px 16px 16px;" id="favs-list">
-    </div>
-    <nav class="bottom-nav">
-      <button class="nav-btn" onclick="goTo('home')"><span class="ic">🏠</span><span>Início</span></button>
-      <button class="nav-btn" onclick="goTo('diario')"><span class="ic">📖</span><span>Diário</span></button>
-      <button class="nav-btn active" onclick="goTo('favs')"><span class="ic">🤍</span><span>Favoritos</span></button>
-      <button class="nav-btn" onclick="goTo('cfg')"><span class="ic">⚙️</span><span>Config.</span></button>
-    </nav>
-  </div>
-
-  <!-- ══════════════════════════════════════════════
-       SCREEN: CONFIGURAÇÕES
-  ══════════════════════════════════════════════ -->
-  <div class="screen hidden" id="screen-cfg" style="background:linear-gradient(160deg,#fdf6f0,#f5d5e8);">
-    <div class="band"></div>
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px 8px;flex-shrink:0;">
-      <button class="back-btn" onclick="goTo('home')">←</button>
-      <h2 style="font-family:var(--cf);font-size:22px;font-weight:400;color:var(--rose);">Configurações</h2>
-      <div style="width:40px;"></div>
-    </div>
-    <div class="scroll-area" style="padding:8px 16px 16px;">
-      <div class="card">
-        <div style="font-family:var(--cf);font-size:19px;color:var(--rose);margin-bottom:8px;">🔔 Lembrete Diário</div>
-        <p style="font-size:13px;color:var(--text-mid);line-height:1.65;">Receba um lembrete toda manhã com a palavra do dia, florzinha 🌸</p>
-        <button onclick="requestNotif()" style="width:100%;border:none;border-radius:50px;padding:12px;color:white;background:var(--grad);font-family:var(--cf);font-size:15px;cursor:pointer;margin-top:12px;">🔔 Ativar notificações</button>
-      </div>
-      <div class="card">
-        <div style="font-family:var(--cf);font-size:19px;color:var(--rose);margin-bottom:8px;">📲 Instalar no celular</div>
-        <p style="font-size:13px;color:var(--text-mid);line-height:1.65;">Toque no botão compartilhar → "Adicionar à Tela de Início" → Confirme 🌸</p>
-      </div>
-      <div class="card">
-        <div style="font-family:var(--cf);font-size:19px;color:var(--rose);margin-bottom:8px;">💕 Sobre</div>
-        <p style="font-size:13px;color:var(--text-mid);line-height:1.65;">Feito com amor por @minhacasinhainterior para cada florzinha que quer florescer com fé.</p>
-      </div>
-    </div>
-    <nav class="bottom-nav">
-      <button class="nav-btn" onclick="goTo('home')"><span class="ic">🏠</span><span>Início</span></button>
-      <button class="nav-btn" onclick="goTo('diario')"><span class="ic">📖</span><span>Diário</span></button>
-      <button class="nav-btn" onclick="goTo('favs')"><span class="ic">🤍</span><span>Favoritos</span></button>
-      <button class="nav-btn active" onclick="goTo('cfg')"><span class="ic">⚙️</span><span>Config.</span></button>
-    </nav>
-  </div>
-
-</div><!-- #app -->
-
+<div id="app"></div>
 <script>
-// ══════════════════════════════════════════════════════
-// 365 PALAVRAS ÚNICAS
-// ══════════════════════════════════════════════════════
-const PALAVRAS_ANO = [
-  // Jan
+// ── 365 PALAVRAS ÚNICAS ───────────────────────────────────────────────────────
+const PALAVRAS_ANO=[
+  // Jan (31)
   "Recomeço","Graça","Renovação","Propósito","Fé","Força","Esperança","Amor","Paz","Presença",
   "Identidade","Cura","Coragem","Obediência","Confiança","Alegria","Perdão","Descanso","Vitória","Chamado",
   "Sabedoria","Perseverança","Bênção","Luz","Abundância","Restauração","Ternura","Proteção","Intimidade","Ânimo","Libertação",
-  // Fev
+  // Fev (28)
   "Florescer","Mansidão","Integridade","Santidade","Deleite","Misericórdia","Humildade","Contentamento","Paciência","Revelação",
   "Transformação","Discernimento","Comunhão","Testemunho","Unção","Direção","Consolo","Maturidade","Adoração","Dependência",
   "Firmeza","Redenção","Quebrantamento","Submissão","Entrega","Clareza","Vocação","Soberania",
-  // Mar
+  // Mar (31)
   "Vitalidade","Florescimento","Consagração","Permanência","Profundidade","Caráter","Herança","Missão","Serviço","Dádiva",
   "Sacrifício","Provisão","Milagre","Clamor","Oração","Vigília","Ressurreição","Vida","Poder","Autoridade",
   "Unidade","Família","Geração","Legado","Memória","Gratidão","Fidelidade","Lealdade","Pacto","Aliança","Promessa",
-  // Abr
+  // Abr (30)
   "Transparência","Vulnerabilidade","Autenticidade","Simplicidade","Comprometimento","Processo","Jornada","Caminhada","Passos","Guia",
   "Florescendo","Maternidade","Terneza","Cuidado","Acolhimento","Segurança","Calor","Conforto","Gentileza","Compaixão",
   "Empatia","Sensibilidade","Percepção","Atenção","Escuta","Acolhida","Conexão","Comunidade","Pertencimento","Vínculo",
-  // Mai
+  // Mai (31)
   "Relacionamento","Amizade","Abertura","Honestidade","Diálogo","Parceria","Cumplicidade","Recolhimento","Silêncio","Contemplação",
   "Reflexão","Meditação","Introspecção","Autoconhecimento","Pureza","Separação","Santificação","Dedicação","Devoção","Paixão",
-  "Fervor","Zelo","Ardor","Prioridade","Foco","Determinação","Resolução","Decisão","Seriedade","Responsabilidade","Comprometimento",
-  // Jun
+  "Fervor","Zelo","Ardor","Prioridade","Foco","Determinação","Resolução","Decisão","Seriedade","Responsabilidade","Temperança",
+  // Jun (30)
   "Refúgio","Abrigo","Lar","Companhia","Lealdade","Constância","Solidez","Fundamento","Raízes","Estabilidade",
   "Cobertura","Sombra","Sossego","Quietude","Tranquilidade","Serenidade","Equanimidade","Harmonia","Inteireza","Completude",
   "Preparação","Capacitação","Aprendizado","Crescimento","Desenvolvimento","Progresso","Avanço","Movimento","Impulso","Motivação",
-  // Jul
+  // Jul (31)
   "Inspiração","Visão","Sonho","Destino","Futuro","Horizonte","Perspectiva","Expectativa","Antecipação","Planejamento",
-  "Estratégia","Iluminação","Entendimento","Conhecimento","Primavera","Florescência","Reavivamento","Despertar","Vigilância","Prontidão",
-  "Disponibilidade","Rendição","Substância","Essência","Núcleo","Centro","Coração","Alma","Espírito","Mente","Vontade",
-  // Ago
-  "Emoção","Sentimento","Intuição","Colheita","Fruto","Celebração","Louvor","Exaltação","Magnificação","Reverência",
-  "Temor","Respeito","Honra","Valorização","Reconhecimento","Admiração","Satisfação","Plenitude","Totalidade","Perfeição",
-  "Excelência","Beleza","Formosura","Advento","Expectativa","Aguardo","Arrependimento","Retorno","Conversão","Mudança","Soltura",
-  // Set
-  "Desprendimento","Natal","Encarnação","Emanuel","Salvação","Proclamação","Envio","Eternidade","Glória","Consumação",
-  "Suficiência","Sobriedade","Temperança","Equilíbrio","Ordem","Organização","Disciplina","Constância","Regularidade","Hábito",
-  "Ritmo","Cadência","Compasso","Timing","Espera","Maturação","Ativação","Mobilização","Implantação","Consolidação",
-  // Out
-  "Firmamento","Sustentação","Cobertura","Escudo","Torre","Fortaleza","Rocha","Âncora","Alicerce","Base",
-  "Suporte","Apoio","Amparo","Socorro","Ajuda","Auxílio","Assistência","Cuidado","Guarda","Proteção",
-  "Nutrição","Alimentação","Sustento","Pão","Água","Fonte","Rio","Manancial","Torrente","Chuva","Orvalho",
-  // Nov
-  "Semente","Plantio","Cultivo","Rega","Colheita","Celeiro","Abundância","Fartura","Provisão","Suprimento",
-  "Necessidade","Pedido","Ouvido","Resposta","Cumprimento","Realização","Concretização","Manifestação","Evidência","Testemunho",
-  "Prova","Confirmação","Certeza","Segurança","Paz","Repouso","Descanso","Cessação","Completude","Acabamento",
-  // Dez
-  "Chegada","Vinda","Presença","Encontro","Revelação","Descoberta","Surpresa","Maravilha","Prodígio","Sinal",
-  "Portento","Milagre","Sobrenatural","Transcendência","Imanência","Proximidade","Intimidade","Comunhão","União","Fusão",
-  "Incorporação","Habitação","Morada","Lar","Casa","Família","Pertença","Adoção","Herança","Legado","Missão"
+  "Estratégia","Iluminação","Entendimento","Conhecimento","Reavivamento","Despertar","Vigilância","Prontidão","Disponibilidade","Rendição",
+  "Substância","Essência","Núcleo","Centro","Coração","Alma","Espírito","Mente","Vontade","Emoção","Intuição",
+  // Ago (31)
+  "Sentimento","Colheita","Fruto","Celebração","Louvor","Exaltação","Magnificação","Reverência","Temor","Respeito",
+  "Honra","Valorização","Reconhecimento","Admiração","Satisfação","Plenitude","Totalidade","Perfeição","Excelência","Beleza",
+  "Formosura","Advento","Aguardo","Arrependimento","Retorno","Conversão","Mudança","Soltura","Desprendimento","Suficiência","Equilíbrio",
+  // Set (30)
+  "Ordem","Organização","Disciplina","Regularidade","Hábito","Ritmo","Cadência","Timing","Espera","Maturação",
+  "Ativação","Mobilização","Consolidação","Firmamento","Sustentação","Escudo","Torre","Fortaleza","Rocha","Âncora",
+  "Alicerce","Base","Suporte","Apoio","Amparo","Socorro","Ajuda","Auxílio","Assistência","Guarda",
+  // Out (31)
+  "Nutrição","Sustento","Pão","Água","Fonte","Rio","Manancial","Torrente","Chuva","Orvalho",
+  "Semente","Plantio","Cultivo","Rega","Celeiro","Fartura","Suprimento","Necessidade","Pedido","Resposta",
+  "Cumprimento","Realização","Concretização","Manifestação","Evidência","Prova","Confirmação","Certeza","Repouso","Cessação","Acabamento",
+  // Nov (30)
+  "Chegada","Vinda","Encontro","Descoberta","Surpresa","Maravilha","Prodígio","Sinal","Portento","Sobrenatural",
+  "Transcendência","Imanência","Proximidade","Morada","Casa","Pertença","Adoção","Incorporação","Habitação","União",
+  "Fusão","Proclamação","Envio","Eternidade","Glória","Consumação","Primícias","Dízimo","Mordomia","Atividade",
+  // Dez (31)
+  "Nova","Encarnação","Emanuel","Salvação","Natal","Testemunho","Missão","Legado","Herança","Comunhão",
+  "Celebração","Alegria","Esperança","Fé","Amor","Paz","Conforto","Cuidado","Presença","Intimidade",
+  "Consagração","Dedicação","Adoração","Louvor","Gratidão","Profundidade","Permanência","Identidade","Propósito","Chamado","Florescendo"
 ];
 
 const MONTHS=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
 const DAYS=["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
+const TEMAS=["Identidade em Deus","Propósito","Cura interior","Fé que avança","Graça e recomeço","Força na fraqueza","Presença de Deus","Sonhos e espera","Coragem","Paz que transcende","Amor próprio em Cristo","Renovação da mente","Obediência","Florescer"];
+const PETALS=[{t:8,l:4,s:32,a:"fp0",d:8,dl:0},{t:25,l:86,s:26,a:"fp1",d:10,dl:1.5},{t:55,l:12,s:22,a:"fp2",d:7,dl:.8},{t:75,l:80,s:28,a:"fp3",d:9,dl:2.2},{t:15,l:55,s:20,a:"fp4",d:11,dl:1},{t:65,l:90,s:30,a:"fp5",d:6,dl:3},{t:40,l:3,s:18,a:"fp6",d:9,dl:1.8},{t:88,l:45,s:24,a:"fp7",d:8,dl:.5}];
 
-const today = new Date();
-const todayISO = today.toISOString().split('T')[0];
-const dateStr = `${DAYS[today.getDay()]}, ${today.getDate()} de ${MONTHS[today.getMonth()]}`;
+const today=new Date();
+const todayISO=today.toISOString().split('T')[0];
+const dateStr=`${DAYS[today.getDay()]}, ${today.getDate()} de ${MONTHS[today.getMonth()]}`;
 
-function getPalavra(date) {
-  const start = new Date(date.getFullYear(), 0, 0);
-  const dayOfYear = Math.floor((date - start) / (1000*60*60*24));
-  return PALAVRAS_ANO[dayOfYear % PALAVRAS_ANO.length];
+function getPalavra(date){
+  const s=new Date(date.getFullYear(),0,0);
+  const dayOfYear=Math.floor((date-s)/(1000*60*60*24));
+  return PALAVRAS_ANO[dayOfYear%PALAVRAS_ANO.length];
 }
-const palavra = getPalavra(today);
+function getTema(d){const s=new Date(d.getFullYear(),0,1);return TEMAS[Math.floor((d-s)/(7*864e5))%TEMAS.length];}
 
-// ══════════════════════════════════════════════════════
-// STATE & STORAGE
-// ══════════════════════════════════════════════════════
-let currentScreen = 'home';
-let isFav = false;
-let anotacao = '';
-let anotacaoSalva = false;
-let devoCache = null;
+const palavraHoje=getPalavra(today);
+const temaHoje=getTema(today);
 
-const store = {
+// ── STORAGE ───────────────────────────────────────────────────────────────────
+const db={
   get(k){try{return JSON.parse(localStorage.getItem(k));}catch{return null;}},
   set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{}},
-  getDiarios(){return this.get('fl_diario')||[];},
+  getCached(d){const a=this.get('fl_cache')||{};return a[d]||null;},
+  setCached(d,v){const a=this.get('fl_cache')||{};const ks=Object.keys(a);if(ks.length>7)delete a[ks[0]];a[d]=v;this.set('fl_cache',a);},
+  getFavs(){return this.get('fl_favs')||[];},
+  saveFav(d,date){const f=this.getFavs();if(f.find(x=>x.date===date))return f;const u=[{date,palavra:d.palavra,tema:d.tema,versiculo:d.versiculo,referencia:d.referencia},...f].slice(0,50);this.set('fl_favs',u);return u;},
+  removeFav(date){const u=this.getFavs().filter(f=>f.date!==date);this.set('fl_favs',u);return u;},
+  isFav(date){return this.getFavs().some(f=>f.date===date);},
+  getNotif(){return this.get('fl_notif')||'07:00';},
+  setNotif(t){this.set('fl_notif',t);},
+  getDiario(){return this.get('fl_diario')||[];},
   saveDiario(entry){
-    const d=this.getDiarios();
+    const d=this.getDiario();
     const idx=d.findIndex(x=>x.date===entry.date);
     if(idx>=0){d[idx]=entry;}else{d.unshift(entry);}
     if(d.length>365)d.pop();
     this.set('fl_diario',d);
     return d;
   },
-  getFavs(){return this.get('fl_favs')||[];},
-  toggleFav(item){
-    const favs=this.getFavs();
-    const idx=favs.findIndex(x=>x.date===item.date);
-    if(idx>=0){favs.splice(idx,1);}else{favs.unshift(item);}
-    this.set('fl_favs',favs);
-    return idx<0;
-  },
-  isFav(date){return this.getFavs().some(x=>x.date===date);}
+  getTodayEntry(){return this.getDiario().find(x=>x.date===todayISO)||null;}
 };
 
-// ══════════════════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════════════════
-(function init(){
-  // Petals
-  const petalData=[
-    {t:8,l:4,s:32,d:8,a:0},{t:25,l:86,s:26,d:10,a:1.5},
-    {t:55,l:12,s:22,d:7,a:.8},{t:75,l:80,s:28,d:9,a:2.2},
-    {t:15,l:55,s:20,d:11,a:1},{t:65,l:90,s:30,d:6,a:3},
-    {t:40,l:3,s:18,d:9,a:1.8},{t:88,l:45,s:24,d:8,a:.5}
-  ];
-  const pc=document.getElementById('petals');
-  petalData.forEach((p,i)=>{
-    const s=document.createElement('span');
-    s.className='petal';
-    s.textContent='🌸';
-    s.style.cssText=`font-size:${p.s}px;top:${p.t}%;left:${p.l}%;opacity:.55;animation:fp${i} ${p.d}s ease-in-out infinite;animation-delay:${p.a}s;`;
-    pc.appendChild(s);
-  });
+// ── STATE ─────────────────────────────────────────────────────────────────────
+const todayEntry=db.getTodayEntry();
+let S={
+  screen:'home',devo:null,loading:false,error:false,
+  isFav:db.isFav(todayISO),favs:db.getFavs(),
+  diarios:db.getDiario(),
+  anotacao:todayEntry?.texto||'',
+  anotacaoSalva:!!todayEntry,
+  notifTime:db.getNotif(),notifOn:false,toast:null
+};
 
-  // Home data
-  document.getElementById('home-palavra').textContent = palavra;
-  document.getElementById('home-date').textContent = dateStr;
-
-  // Load saved diary state
-  const saved = store.getDiarios().find(x=>x.date===todayISO);
-  if(saved){ anotacao=saved.texto; anotacaoSalva=true; }
-
-  // Check fav
-  isFav = store.isFav(todayISO);
-  updateFavUI();
-})();
-
-// ══════════════════════════════════════════════════════
-// NAVIGATION
-// ══════════════════════════════════════════════════════
-function goTo(screen) {
-  document.getElementById('screen-'+currentScreen).classList.add('hidden');
-  document.getElementById('screen-'+screen).classList.remove('hidden');
-  currentScreen = screen;
-  if(screen==='diario') renderDiario();
-  if(screen==='favs') renderFavs();
+// ── API ───────────────────────────────────────────────────────────────────────
+async function init(){
+  if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
+  render();
+  const cached=db.getCached(todayISO);
+  if(cached){S.devo=cached;render();return;}
+  S.loading=true;render();
+  try{const d=await gerarDevo();S.devo=d;S.loading=false;db.setCached(todayISO,d);}
+  catch(e){S.loading=false;S.error=true;}
+  render();
 }
 
-function openDevo() {
-  goTo('devo');
-  if(!devoCache) generateDevo();
-  else renderDevoBody(devoCache);
+async function gerarDevo(){
+  const ds=`${DAYS[today.getDay()]}, ${today.getDate()} de ${MONTHS[today.getMonth()]} de ${today.getFullYear()}`;
+  const usados=db.getDiario().slice(0,30).map(x=>x.palavra).filter(Boolean);
+  const prompt=`Você é uma escritora devocional cristã feminina ungida, no estilo de Camila Vieira. Bíblia Almeida Corrigida. Escreve para mulheres brasileiras. Sempre chame de "florzinha".
+Hoje é ${ds}. Palavra do dia: "${palavraHoje}". Tema: "${temaHoje}".
+${usados.length?`Palavras já usadas recentemente (NÃO repita versículos ou temas): ${usados.join(', ')}.`:''}
+Responda APENAS em JSON válido sem markdown:
+{"palavra":"${palavraHoje}","tema":"${temaHoje}","referencia":"Livro cap:v (Almeida Corrigida)","versiculo":"texto completo","desconstrucao":"2-3 linhas revelando profundidade","exemplo_jesus":"2-3 frases sobre Cristo","conexao_mulher":"2-3 frases para a realidade dela","frase_impacto":"UMA linha forte","lista_negacao_titulo":"TÍTULO","lista_negacao":["item 1","item 2","item 3","item 4"],"redefincao":"1-2 frases","lista_cristo_titulo":"TÍTULO","lista_cristo":["item 1","item 2","item 3"],"contraste":"frase de contraste","ensinamento_extra":"2-3 frases","aprofundamento":"2-3 frases","lista_madura_titulo":"TÍTULO","lista_madura":["item 1","item 2","item 3"],"climax_citacao":"ponto máximo","conclusao_nomeada":"isso é [nome]","lista_aplicacao_titulo":"TÍTULO","lista_aplicacao":["item 1","item 2","item 3","item 4","item 5"],"fechamento_1":"frase de contraste","fechamento_2":"frase de identidade","oracao":"oração final 2-3 frases"}`;
+
+  const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:2000,system:"Escreva devocionais cristãos femininos profundos. Bíblia Almeida Corrigida. Responda APENAS com JSON válido.",messages:[{role:"user",content:prompt}]})});
+  const data=await res.json();
+  const text=data.content?.filter(b=>b.type==="text").map(b=>b.text).join("")||"";
+  return JSON.parse(text.replace(/```json|```/g,"").trim());
 }
 
-// ══════════════════════════════════════════════════════
-// API ANTHROPIC — GERAR DEVOCIONAL
-// ══════════════════════════════════════════════════════
-async function generateDevo() {
-  document.getElementById('devo-loading').style.display='flex';
-  document.getElementById('devo-body').style.display='none';
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function go(s){S.screen=s;render();}
+function togFav(){
+  if(S.isFav){db.removeFav(todayISO);S.isFav=false;toast('Removido dos favoritos');}
+  else if(S.devo){db.saveFav(S.devo,todayISO);S.isFav=true;toast('Salvo nos favoritos 🌸');}
+  S.favs=db.getFavs();render();
+}
+async function shareWA(){
+  const d=S.devo;if(!d)return;
+  const text=`🌸 *${d.palavra}* — ${dateStr}\n\n_"${d.versiculo}"_\n— ${d.referencia}\n\n${d.fechamento_2}\n\n✨ @minhacasinhainterior\n🌸 minha-casinha-interior.vercel.app`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`,'_blank');
+}
+async function reqNotif(){
+  if(!('Notification'in window)){toast('Não suportado');return;}
+  const p=await Notification.requestPermission();
+  if(p==='granted'){S.notifOn=true;schedNotif();toast('Notificações ativadas! 🌸');}
+  else toast('Permissão negada.');render();
+}
+function schedNotif(){
+  const[h,m]=S.notifTime.split(':').map(Number);
+  const now=new Date(),next=new Date();
+  next.setHours(h,m,0,0);if(next<=now)next.setDate(next.getDate()+1);
+  setTimeout(()=>{if(Notification.permission==='granted')new Notification('Florescendo 🌸',{body:`Sua palavra de hoje: "${palavraHoje}" 💕`,icon:'/icon-192.png'});schedNotif();},next-now);
+}
+function toast(msg){S.toast=msg;render();setTimeout(()=>{S.toast=null;render();},2800);}
+function fmtDate(iso){const[y,m,d]=iso.split('-');return`${d}/${m}/${y}`;}
 
-  // Check cache for today
-  const cached = store.get('fl_devo_'+todayISO);
-  if(cached){ devoCache=cached; renderDevoBody(cached); return; }
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key': typeof ANTHROPIC_API_KEY !== 'undefined' ? ANTHROPIC_API_KEY : '',
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 2000,
-        system: `Você é um escritor devocional cristão feminino profundo e acolhedor. Gere devocionais para mulheres brasileiras com linguagem pastoral, emotiva e bíblica. Use a Bíblia Almeida Corrigida. Responda SOMENTE em JSON válido, sem markdown, sem backticks.`,
-        messages:[{
-          role:'user',
-          content:`Gere um devocional completo para hoje. Palavra do dia: "${palavra}". Data: ${dateStr}.
-
-Responda SOMENTE com este JSON (sem backticks, sem markdown):
-{
-  "palavra": "${palavra}",
-  "referencia": "versículo bíblico relevante (livro capítulo:versículo)",
-  "versiculo": "texto completo do versículo na Bíblia Almeida Corrigida",
-  "desconstrucao": "parágrafo aprofundando o versículo (3-4 frases)",
-  "exemplo_jesus": "como Jesus viveu essa palavra (3-4 frases)",
-  "conexao_mulher": "conexão emocional com a mulher de hoje, começando com Florzinha (4-5 frases)",
-  "frase_impacto": "frase impactante curta e memorável sobre a palavra",
-  "lista_negacao_titulo": "TÍTULO EM CAIXA ALTA — O QUE ESTA PALAVRA NÃO SIGNIFICA",
-  "lista_negacao": ["item 1;","item 2;","item 3;","item 4;"],
-  "redefincao": "redefinição positiva da palavra (2-3 frases)",
-  "lista_cristo_titulo": "TÍTULO EM CAIXA ALTA — COMO JESUS VIVEU ISSO",
-  "lista_cristo": ["item 1;","item 2;","item 3;"],
-  "contraste": "contraste entre mulher sem essa palavra e com essa palavra (2 frases)",
-  "ensinamento_extra": "ensinamento extra profundo sobre o versículo (3-4 frases)",
-  "aprofundamento": "aprofundamento espiritual (3-4 frases)",
-  "lista_madura_titulo": "TÍTULO EM CAIXA ALTA — UMA MULHER MADURA NESSA PALAVRA SABE QUE",
-  "lista_madura": ["item 1;","item 2;","item 3;"],
-  "climax_citacao": "citação climática sobre Jesus e a mulher (3-4 frases emotivas)",
-  "conclusao_nomeada": "conclusão em 4-6 palavras impactantes",
-  "lista_aplicacao_titulo": "TÍTULO EM CAIXA ALTA — COMO VIVER ISSO HOJE",
-  "lista_aplicacao": ["ação 1;","ação 2;","ação 3;","ação 4;","ação 5;"],
-  "fechamento_1": "frase de fechamento reflexiva (1 frase)",
-  "fechamento_2": "frase de fechamento positiva e forte (1 frase)",
-  "oracao": "oração final de 3-5 frases, terminando com Amém."
-}`
-        }]
-      })
-    });
-
-    const data = await res.json();
-    let text = data.content.map(i=>i.text||'').join('');
-    // Strip any markdown fences
-    text = text.replace(/```json|```/g,'').trim();
-    const devo = JSON.parse(text);
-    devoCache = devo;
-    store.set('fl_devo_'+todayISO, devo);
-    renderDevoBody(devo);
-
-  } catch(err) {
-    console.error(err);
-    // Fallback devocional
-    const fallback = getFallback();
-    devoCache = fallback;
-    renderDevoBody(fallback);
-  }
+function petalsHTML(op=0.55){
+  return PETALS.map(p=>`<span class="petal" style="top:${p.t}%;left:${p.l}%;font-size:${p.s}px;animation:${p.a} ${p.d}s ease-in-out infinite;animation-delay:${p.dl}s;opacity:${op}">🌸</span>`).join('');
+}
+function bnav(active){
+  const items=[{id:'home',ic:'🏠',lb:'Início'},{id:'diario',ic:'📖',lb:'Diário'},{id:'favs',ic:'🤍',lb:'Favoritos'},{id:'cfg',ic:'⚙️',lb:'Config.'}];
+  return`<nav class="bottom-nav">${items.map(i=>`<button class="nav-btn${i.id===active?' nav-on':''}" onclick="go('${i.id}')"><span>${i.ic}</span><span>${i.lb}</span></button>`).join('')}</nav>`;
+}
+function mkList(items){
+  if(!items)return'';
+  return`<ul class="devo-list">${(Array.isArray(items)?items:[items]).map(i=>`<li>${i}</li>`).join('')}</ul>`;
 }
 
-function getFallback() {
-  return {
-    palavra,
-    referencia:"Isaías 43:19",
-    versiculo:"Eis que faço uma coisa nova; já está saindo à luz, não a percebeis? Eis que porei um caminho no deserto e rios no lugar seco.",
-    desconstrucao:"Esse versículo fala sobre a coragem de soltar o que Deus já encerrou — para enxergar o que Ele está abrindo agora. Deus não abandona. Ele recomeça.",
-    exemplo_jesus:"Jesus não carregava o peso das expectativas humanas. Ele vinha fazer coisa nova — curar num sábado, falar com samaritanas, jantar com pecadores. Quem estava preso ao antigo não conseguia ver o novo.",
-    conexao_mulher:"Florzinha, quantas vezes você ficou tão presa ao que foi que não conseguiu ver o que está sendo? A dor antiga ocupa espaço que o milagre novo precisaria ter. Deus não está te pedindo para fingir que não doeu. Ele está te convidando a não deixar que a dor seja maior que a promessa.",
-    frase_impacto:"Você não pode entrar no novo carregando tudo do velho.",
-    lista_negacao_titulo:"ISSO NÃO SIGNIFICA",
-    lista_negacao:["fingir que não aconteceu;","não sentir mais nada;","apagar memórias;","ignorar o que você viveu."],
-    redefincao:"Significa escolher não deixar que o passado defina o que você pode receber. É dar permissão para Deus escrever um novo capítulo.",
-    lista_cristo_titulo:"JESUS INAUGUROU O NOVO ASSIM",
-    lista_cristo:["transformou água em vinho — o melhor guardou para o fim;","disse 'eis que faço novas todas as coisas';","ressuscitou — o fim virou começo."],
-    contraste:"Uma mulher que vive olhando pelo retrovisor chega exausta. Uma mulher que confia no novo de Deus chega leve.",
-    ensinamento_extra:"O novo de Deus já está saindo à luz — mesmo antes de você perceber. Ele age e depois te convida a enxergar.",
-    aprofundamento:"Muitas mulheres perdem o novo porque estão ocupadas demais lamentando o antigo. Deus não está competindo com o seu passado. Ele está construindo o seu futuro.",
-    lista_madura_titulo:"UMA MULHER MADURA SABE QUE",
-    lista_madura:["luto tem tempo, mas não pode ter endereço permanente;","fé é confiar no que não dá pra ver ainda;","o deserto tem caminho — se Deus prometeu, Ele abre."],
-    climax_citacao:"Jesus apareceu primeiro a Maria Madalena — uma mulher que tinha muito passado. E a primeira palavra que Ele disse não foi cobrança. Foi o nome dela. Isso é o novo de Deus: Ele te chama pelo nome.",
-    conclusao_nomeada:"Isso é renovação com identidade.",
-    lista_aplicacao_titulo:"ABRA ESPAÇO PARA O NOVO",
-    lista_aplicacao:["solte a conversa que ficou — perdoe sem esperar pedido;","pare de se apresentar como quem você foi;","diga sim para o que ainda não faz sentido;","ore pelo novo antes de vê-lo;","comemore os pequenos sinais de mudança."],
-    fechamento_1:"Uma mulher que carrega tudo que passou vai chegar exausta ao que está por vir.",
-    fechamento_2:"Uma mulher que confia no novo de Deus chega leve — e pronta para receber.",
-    oracao:"Senhor, me dá coragem para soltar o que o Senhor já encerrou. Que eu tenha olhos para enxergar o caminho que está sendo aberto agora, mesmo que ainda pareça deserto. Eu confio no Teu novo. Amém."
-  };
+// ── HOME ──────────────────────────────────────────────────────────────────────
+function renderHome(){
+  return`<div class="screen" style="background:linear-gradient(170deg,#fdf6f0,#faeae0 40%,#f5dce8)">
+    ${petalsHTML()}
+    <div class="band"></div>
+    <div style="text-align:center;padding:22px 24px 4px;position:relative;z-index:1">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;letter-spacing:6px;text-transform:uppercase;color:#7a3f5a">Florescendo</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:13px;font-style:italic;color:#b8957e;margin-top:4px">Seu devocional diário para florescer com fé</div>
+      <div style="width:44px;height:1px;background:linear-gradient(90deg,#d4a0b0,#e8b896);margin:8px auto 0;opacity:.7"></div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 32px 16px;text-align:center;position:relative;z-index:1">
+      ${S.loading?`
+        <div style="font-size:52px;margin-bottom:18px;animation:pulse 1.5s ease-in-out infinite">🌸</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:#7a3f5a;margin-bottom:8px">Preparando sua palavra...</div>
+        <div style="font-size:13px;color:#b8957e;line-height:1.7;max-width:260px">Escrevendo especialmente para você, florzinha 💕</div>
+        <div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div>`:
+      S.error?`
+        <div style="font-size:44px;margin-bottom:12px">🙏</div>
+        <p style="font-family:'Cormorant Garamond',serif;color:#7a3f5a;margin-bottom:20px;font-size:16px;line-height:1.6">Não consegui carregar.<br>Verifique sua internet.</p>
+        <button class="btn-main" onclick="retryLoad()">Tentar novamente 🌸</button>`:
+      `<div style="font-size:58px;margin-bottom:14px;animation:flt 3s ease-in-out infinite">🌸</div>
+        <div style="font-size:10px;letter-spacing:4px;color:#c4836a;text-transform:uppercase;margin-bottom:8px">A palavra de hoje</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:54px;font-weight:300;letter-spacing:-1px;background:linear-gradient(135deg,#7a3f5a,#c4836a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px">${S.devo?.palavra||palavraHoje}</div>
+        <div style="font-size:12px;color:#b8957e;letter-spacing:1px;margin-bottom:22px">${dateStr}</div>
+        <div style="width:40px;height:1px;background:linear-gradient(90deg,#d4a0b0,#e8b896);margin:0 auto 22px;opacity:.6"></div>
+        <button class="btn-main" onclick="go('devo')">Abrir devocional de hoje 🌸</button>`}
+    </div>
+    ${bnav('home')}</div>`;
 }
 
-// ══════════════════════════════════════════════════════
-// RENDER DEVOCIONAL
-// ══════════════════════════════════════════════════════
-function renderDevoBody(d) {
-  const body = document.getElementById('devo-body');
+// ── DEVOCIONAL ────────────────────────────────────────────────────────────────
+function renderDevo(){
+  if(!S.devo){go('home');return'';}
+  const d=S.devo;
 
-  const dlist = items => `<ul class="dlist">${items.map(it=>`<li>${it}</li>`).join('')}</ul>`;
-
-  body.innerHTML = `
-    <!-- Hero -->
-    <div style="text-align:center;padding:28px 28px 20px;background:linear-gradient(170deg,#fdf6f0,#faeae0);border-bottom:1px solid rgba(122,63,90,.08);">
-      <div style="font-size:34px;margin-bottom:10px;animation:flt 3s ease-in-out infinite;">🌸</div>
-      <div style="font-size:9px;letter-spacing:4px;color:var(--peach);text-transform:uppercase;margin-bottom:8px;">${d.referencia}</div>
-      <div style="width:70px;height:1px;background:linear-gradient(90deg,transparent,var(--petal),transparent);margin:0 auto;"></div>
+  const diarioSection=S.anotacaoSalva?`
+    <div style="background:rgba(255,255,255,.7);border-radius:16px;padding:18px 20px;border:1px solid rgba(122,63,90,.15);margin-bottom:12px">
+      <div style="font-size:9px;letter-spacing:3px;color:#c4836a;text-transform:uppercase;margin-bottom:8px">✍️ Sua anotação de hoje</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:15px;line-height:1.8;color:#4a3030;font-style:italic">${S.anotacao}</div>
     </div>
-
-    <!-- Versículo -->
-    <div class="sec">
-      <div style="background:rgba(255,255,255,.65);border-radius:14px;padding:20px 22px;border:1px solid rgba(122,63,90,.1);">
-        <div style="font-family:var(--cf);font-size:19px;line-height:1.75;color:#4a2a3a;text-align:center;">"${d.versiculo}"</div>
-      </div>
-    </div>
-
-    <div class="sec"><div class="btext">${d.desconstrucao}</div></div>
-    <div class="sec"><div class="floral-div">❋</div><div class="btext">${d.exemplo_jesus}</div></div>
-    <div class="sec"><div class="btext">${d.conexao_mulher}</div></div>
-
-    <div class="sec">
-      <div class="impact-box">
-        <div style="font-family:var(--cf);font-size:19px;font-weight:500;line-height:1.6;color:var(--rose);font-style:italic;">${d.frase_impacto}</div>
-      </div>
-    </div>
-
-    <div class="sec"><div class="floral-div">❋</div><div class="list-title">${d.lista_negacao_titulo}</div>${dlist(d.lista_negacao)}</div>
-    <div class="sec"><div class="btext">${d.redefincao}</div></div>
-    <div class="sec"><div class="floral-div">❋</div><div class="list-title">${d.lista_cristo_titulo}</div>${dlist(d.lista_cristo)}</div>
-
-    <div class="sec">
-      <div class="impact-box"><div class="btext">${d.contraste}</div></div>
-    </div>
-
-    <div class="sec"><div class="btext">${d.ensinamento_extra}</div></div>
-    <div class="sec"><div class="btext">${d.aprofundamento}</div></div>
-    <div class="sec"><div class="floral-div">❋</div><div class="list-title">${d.lista_madura_titulo}</div>${dlist(d.lista_madura)}</div>
-
-    <div class="sec">
-      <div class="dark-box">
-        <div style="font-family:var(--cf);font-size:17px;line-height:1.8;color:white;">${d.climax_citacao}</div>
-      </div>
-    </div>
-
-    <div class="sec" style="text-align:center;">
-      <div style="font-family:var(--cf);font-size:22px;font-weight:500;color:var(--rose);font-style:italic;">${d.conclusao_nomeada}</div>
-    </div>
-
-    <div class="sec"><div class="floral-div">❋</div><div class="list-title">${d.lista_aplicacao_titulo}</div>${dlist(d.lista_aplicacao)}</div>
-
-    <div class="sec" style="text-align:center;">
-      <div style="font-family:var(--cf);font-size:16px;color:#4a3030;font-style:italic;line-height:1.8;margin-bottom:14px;">${d.fechamento_1}</div>
-      <div style="font-family:var(--cf);font-size:20px;font-weight:600;color:#4a2a3a;line-height:1.5;">${d.fechamento_2}</div>
-    </div>
-
-    <div style="padding:6px 24px;"><div class="divider"></div></div>
-
-    <!-- Oração -->
-    <div style="background:var(--grad);padding:28px 24px;text-align:center;">
-      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:16px;">🙏 Oração</div>
-      <div style="font-family:var(--cf);font-size:17px;font-style:italic;line-height:1.85;color:white;">${d.oracao}</div>
-    </div>
-
-    <!-- Diário Espiritual inline -->
-    <div style="padding:24px 22px;background:linear-gradient(170deg,#fdf6f0,#faeae0 50%,#f5dce8);">
-      <div style="text-align:center;margin-bottom:18px;">
-        <div style="font-size:26px;margin-bottom:8px;">📖</div>
-        <div style="font-family:var(--cf);font-size:21px;font-weight:500;color:var(--rose);margin-bottom:6px;">Diário Espiritual</div>
-        <div style="font-family:var(--cf);font-size:14px;font-style:italic;color:var(--text-light);line-height:1.7;">Florzinha, o que você aprendeu hoje?<br/>Este cantinho foi reservado para você. 🌸</div>
-        <div style="width:44px;height:1px;background:linear-gradient(90deg,transparent,var(--petal),transparent);margin:12px auto 0;"></div>
-      </div>
-      <div id="diario-inline"></div>
-    </div>
-
-    <div style="text-align:center;padding:20px 24px 28px;">
-      <div style="font-size:22px;margin-bottom:8px;">🌸</div>
-      <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text-light);opacity:.7;">${d.referencia}</div>
-    </div>
+    <button onclick="editarAnotacao()" style="width:100%;background:transparent;border:1px solid rgba(122,63,90,.25);border-radius:50px;padding:11px;color:#9b4d72;font-family:'Cormorant Garamond',serif;font-size:14px;cursor:pointer">✏️ Editar anotação</button>
+  `:`
+    <textarea id="devo-ta" placeholder="Escreva aqui o que Deus falou ao seu coração hoje..." onkeyup="atualizarAnotacao(this.value)">${S.anotacao}</textarea>
+    <div style="font-size:11px;color:#b8957e;text-align:right;margin-top:4px;margin-bottom:12px" id="char-count">${S.anotacao.length} caracteres</div>
+    <button onclick="salvarAnotacao()" class="btn-main" style="width:100%;padding:14px;font-size:16px">Salvar no meu diário 💕</button>
   `;
 
-  document.getElementById('devo-loading').style.display='none';
-  document.getElementById('devo-body').style.display='block';
-  renderDiarioInline();
-}
-
-function renderDiarioInline() {
-  const el = document.getElementById('diario-inline');
-  if(!el) return;
-  if(anotacaoSalva) {
-    el.innerHTML = `
-      <div style="animation:fadeIn .5s ease;">
-        <div style="background:rgba(255,255,255,.7);border-radius:16px;padding:18px 20px;border:1px solid rgba(122,63,90,.15);margin-bottom:12px;">
-          <div style="font-size:9px;letter-spacing:3px;color:var(--peach);text-transform:uppercase;margin-bottom:8px;">✍️ Sua anotação de hoje</div>
-          <div style="font-family:var(--cf);font-size:15px;line-height:1.8;color:#4a3030;font-style:italic;">${escHtml(anotacao)}</div>
-        </div>
-        <button onclick="editAnotacao()" class="btn-ghost">✏️ Editar anotação</button>
-      </div>`;
-  } else {
-    el.innerHTML = `
-      <div>
-        <textarea id="ta-anotacao" placeholder="Escreva aqui o que Deus falou ao seu coração hoje...">${escHtml(anotacao)}</textarea>
-        <div style="font-size:11px;color:var(--text-light);text-align:right;margin-top:4px;margin-bottom:12px;" id="ta-count">${anotacao.length} caracteres</div>
-        <button onclick="salvarAnotacao()" style="width:100%;border:none;border-radius:50px;padding:14px;color:white;font-family:var(--cf);font-size:16px;cursor:pointer;background:var(--grad);box-shadow:0 4px 16px rgba(122,63,90,.25);">Salvar no meu diário 💕</button>
-      </div>`;
-    const ta = document.getElementById('ta-anotacao');
-    if(ta) ta.addEventListener('input', e=>{
-      anotacao=e.target.value;
-      const c=document.getElementById('ta-count');
-      if(c) c.textContent=anotacao.length+' caracteres';
-    });
-  }
-}
-
-function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-function editAnotacao(){ anotacaoSalva=false; renderDiarioInline(); }
-
-function salvarAnotacao(){
-  if(!anotacao.trim()){ showToast('Escreva algo primeiro 🌸'); return; }
-  const entry={date:todayISO,dataStr:dateStr,palavra,texto:anotacao};
-  store.saveDiario(entry);
-  anotacaoSalva=true;
-  showToast('Salvo no seu diário! 🌸');
-  renderDiarioInline();
-}
-
-// ══════════════════════════════════════════════════════
-// FAVORITOS
-// ══════════════════════════════════════════════════════
-function toggleFav(){
-  if(!devoCache) return;
-  const item={date:todayISO,dataStr:dateStr,palavra,referencia:devoCache.referencia,versiculo:devoCache.versiculo,frase:devoCache.frase_impacto};
-  isFav = store.toggleFav(item);
-  updateFavUI();
-  showToast(isFav ? 'Salvo nos favoritos 🌸' : 'Removido dos favoritos');
-}
-
-function toggleFavBtn(){ toggleFav(); }
-
-function updateFavUI(){
-  const fb=document.getElementById('fav-btn');
-  const sb=document.getElementById('save-btn');
-  if(fb) fb.textContent=isFav?'❤️':'🤍';
-  if(sb) sb.textContent=isFav?'❤️ Salvo':'🤍 Salvar';
-}
-
-function renderFavs(){
-  const list=document.getElementById('favs-list');
-  const favs=store.getFavs();
-  if(!favs.length){
-    list.innerHTML=`<div style="text-align:center;padding:60px 24px;color:#9b7a6a;">
-      <div style="font-size:48px;margin-bottom:12px;">🤍</div>
-      <p style="font-family:var(--cf);font-size:18px;">Nenhum favorito ainda.</p>
-      <p style="font-size:12px;margin-top:8px;opacity:.7;">No devocional, toque em "Salvar".</p>
-    </div>`;
-    return;
-  }
-  list.innerHTML = favs.map(f=>`
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
-        <div>
-          <div style="font-family:var(--cf);font-size:20px;color:var(--rose);">${f.palavra}</div>
-          <div style="font-size:10px;color:var(--text-light);margin-top:2px;letter-spacing:1px;">${f.dataStr}</div>
-        </div>
-        <div style="font-size:20px;">❤️</div>
+  const content=`<div class="fade-in">
+    <div style="text-align:center;padding:28px 28px 20px;background:linear-gradient(170deg,#fdf6f0,#faeae0);border-bottom:1px solid rgba(122,63,90,.08)">
+      <div style="font-size:34px;margin-bottom:10px;animation:flt 3s ease-in-out infinite">🌸</div>
+      <div style="font-size:9px;letter-spacing:4px;color:#c4836a;text-transform:uppercase;margin-bottom:8px">${d.referencia}</div>
+      <div style="width:70px;height:1px;background:linear-gradient(90deg,transparent,#d4a0b0,transparent);margin:0 auto"></div>
+    </div>
+    <div class="sec"><div class="card-white"><div style="font-family:'Cormorant Garamond',serif;font-size:19px;line-height:1.75;color:#4a2a3a;text-align:center">"${d.versiculo}"</div></div></div>
+    <div class="sec"><div class="body-text">${d.desconstrucao}</div></div>
+    <div class="sec"><div class="flor-div">❋</div><div class="body-text" style="font-style:italic">${d.exemplo_jesus}</div></div>
+    <div class="sec"><div class="body-text">${d.conexao_mulher}</div></div>
+    <div class="sec"><div class="card-soft"><div class="impact">${d.frase_impacto}</div></div></div>
+    <div class="sec"><div class="flor-div">❋</div><div class="list-label">${d.lista_negacao_titulo}</div>${mkList(d.lista_negacao)}</div>
+    <div class="sec"><div class="body-text">${d.redefincao}</div></div>
+    <div class="sec"><div class="flor-div">❋</div><div class="list-label">${d.lista_cristo_titulo}</div>${mkList(d.lista_cristo)}</div>
+    <div class="sec"><div class="card-soft"><div class="body-text">${d.contraste}</div></div></div>
+    <div class="sec"><div class="body-text">${d.ensinamento_extra}</div></div>
+    <div class="sec"><div class="body-text" style="font-style:italic">${d.aprofundamento}</div></div>
+    <div class="sec"><div class="flor-div">❋</div><div class="list-label">${d.lista_madura_titulo}</div>${mkList(d.lista_madura)}</div>
+    <div class="sec"><div class="card-dark"><div style="font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.8;color:white">${d.climax_citacao}</div></div></div>
+    <div class="sec"><div style="text-align:center"><div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;color:#7a3f5a;font-style:italic">${d.conclusao_nomeada}</div></div></div>
+    <div class="sec"><div class="flor-div">❋</div><div class="list-label">${d.lista_aplicacao_titulo}</div>${mkList(d.lista_aplicacao)}</div>
+    <div class="sec">
+      <div style="text-align:center">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:16px;color:#4a3030;font-style:italic;line-height:1.8;margin-bottom:14px">${d.fechamento_1}</div>
+        <div style="width:36px;height:1px;background:linear-gradient(90deg,transparent,#d4a0b0,transparent);margin:0 auto 14px"></div>
+        <div class="card-soft"><div style="font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:#4a2a3a;text-align:center;line-height:1.5">${d.fechamento_2}</div></div>
       </div>
-      <div class="divider" style="margin-bottom:12px;"></div>
-      <div style="font-family:var(--cf);font-size:13px;color:#7a5a4a;font-style:italic;margin-bottom:8px;">${f.referencia}</div>
-      <div style="font-family:var(--cf);font-size:15px;line-height:1.7;color:#4a3030;font-style:italic;">"${f.frase}"</div>
-    </div>`).join('');
+    </div>
+    <div style="padding:6px 24px"><div style="height:1px;background:linear-gradient(90deg,transparent,rgba(212,160,176,.5),transparent)"></div></div>
+    <div style="background:linear-gradient(135deg,#7a3f5a,#c4836a);padding:28px 24px;text-align:center">
+      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:16px">🙏 Oração</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;line-height:1.85;color:white">${d.oracao}</div>
+    </div>
+    <div style="padding:24px 22px;background:linear-gradient(170deg,#fdf6f0,#faeae0 50%,#f5dce8)">
+      <div style="text-align:center;margin-bottom:18px">
+        <div style="font-size:26px;margin-bottom:8px">📖</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:500;color:#7a3f5a;margin-bottom:6px">Diário Espiritual</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:#b8957e;line-height:1.7">Florzinha, o que você aprendeu hoje?<br>Este cantinho foi reservado para você. 🌸</div>
+        <div style="width:44px;height:1px;background:linear-gradient(90deg,transparent,#d4a0b0,transparent);margin:12px auto 0"></div>
+      </div>
+      ${diarioSection}
+    </div>
+    <div style="text-align:center;padding:20px 24px 28px">
+      <div style="font-size:22px;margin-bottom:8px">🌸</div>
+      <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#b8957e;opacity:.7">${d.referencia}</div>
+    </div>
+  </div>`;
+
+  return`<div class="screen" style="background:linear-gradient(170deg,#fdf6f0,#f5ece8)">
+    <div class="band"></div>
+    <div class="devo-topbar">
+      <button class="icon-btn" onclick="go('home')" style="color:#7a3f5a">←</button>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:15px;color:#7a3f5a;letter-spacing:2px;text-transform:uppercase">Florescendo</div>
+      <button class="icon-btn" onclick="togFav()">${S.isFav?'❤️':'🤍'}</button>
+    </div>
+    <div class="devo-scroll">${content}</div>
+    <div class="devo-actions">
+      <button class="btn-sec" onclick="togFav()" style="flex:1">${S.isFav?'❤️ Salvo':'🤍 Salvar'}</button>
+      <button onclick="shareWA()" style="flex:1;border:none;border-radius:50px;padding:13px 16px;color:white;background:#25D366;font-family:'Cormorant Garamond',serif;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp
+      </button>
+    </div>
+  </div>`;
 }
 
-// ══════════════════════════════════════════════════════
-// DIÁRIO SCREEN
-// ══════════════════════════════════════════════════════
+// ── DIÁRIO ────────────────────────────────────────────────────────────────────
 function renderDiario(){
-  const list=document.getElementById('diario-list');
-  const diarios=store.getDiarios();
-  if(!diarios.length){
-    list.innerHTML=`<div style="text-align:center;padding:60px 24px;color:#9b7a6a;">
-      <div style="font-size:52px;margin-bottom:12px;">📖</div>
-      <p style="font-family:var(--cf);font-size:18px;color:var(--rose);">Seu diário está vazio.</p>
-      <p style="font-size:13px;margin-top:8px;opacity:.7;line-height:1.6;">Após o devocional, escreva o que<br/>Deus falou ao seu coração.</p>
-    </div>`;
-    return;
-  }
-  list.innerHTML = diarios.map((d,i)=>`
-    <div class="card" style="animation-delay:${i*.05}s;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
-        <div>
-          <div style="font-family:var(--cf);font-size:20px;color:var(--rose);">${d.palavra}</div>
-          <div style="font-size:10px;color:var(--text-light);margin-top:2px;letter-spacing:1px;">${d.dataStr}</div>
+  return`<div class="screen" style="background:linear-gradient(170deg,#fdf6f0,#faeae0 40%,#f5dce8)">
+    ${petalsHTML(.35)}
+    <div class="band"></div>
+    <div style="text-align:center;padding:18px 16px 8px;position:relative;z-index:1">
+      <div style="font-size:28px;margin-bottom:6px">📖</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:#7a3f5a">Diário Espiritual</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:12px;font-style:italic;color:#b8957e;margin-top:3px">Suas anotações com Deus 🌸</div>
+      <div style="width:36px;height:1px;background:linear-gradient(90deg,#d4a0b0,#e8b896);margin:8px auto 0;opacity:.7"></div>
+    </div>
+    <div class="list-body" style="position:relative;z-index:1">
+      ${S.diarios.length===0?`
+        <div class="empty">
+          <div style="font-size:52px;margin-bottom:12px">📖</div>
+          <p style="font-family:'Cormorant Garamond',serif;font-size:18px;color:#7a3f5a">Seu diário está vazio.</p>
+          <p style="font-size:13px;margin-top:8px;opacity:.7;line-height:1.6">Após o devocional, escreva o que<br>Deus falou ao seu coração.</p>
+        </div>`:
+      S.diarios.map(d=>`
+        <div class="diary-card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+            <div><div class="diary-palavra">${d.palavra}</div><div class="diary-date">${d.dataStr}</div></div>
+            <div style="font-size:20px">📖</div>
+          </div>
+          <div class="diary-divider"></div>
+          <div class="diary-texto">${d.texto}</div>
+        </div>`).join('')}
+    </div>
+    ${bnav('diario')}</div>`;
+}
+
+// ── FAVORITOS ─────────────────────────────────────────────────────────────────
+function renderFavs(){
+  return`<div class="screen" style="background:linear-gradient(160deg,#fdf6f0,#faeae0)">
+    <div class="band"></div>
+    <div class="list-hdr"><button class="icon-btn" onclick="go('home')" style="color:#7a3f5a">←</button><h2 class="list-title">Favoritos</h2><div style="width:40px"></div></div>
+    <div class="list-body">
+      ${S.favs.length===0?`
+        <div class="empty"><div style="font-size:48px;margin-bottom:12px">🤍</div>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:18px">Nenhum favorito ainda.</p>
+        <p style="font-size:12px;margin-top:8px;opacity:.7">No devocional, toque em "Salvar".</p></div>`:
+      S.favs.map(f=>`
+        <div class="list-card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+            <div><div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:#7a3f5a">${f.palavra}</div>
+            <div style="font-size:11px;color:#b8957e;margin-top:2px">${f.tema||''} · ${fmtDate(f.date)}</div></div>
+            <button class="icon-btn" style="font-size:16px;color:#b8957e" onclick="rmFav('${f.date}')">🗑</button>
+          </div>
+          ${f.versiculo?`<div style="font-family:'Cormorant Garamond',serif;font-size:13px;color:#5a3a2a;line-height:1.6;font-style:italic;margin-top:6px">"${f.versiculo}"</div>`:''}
+        </div>`).join('')}
+    </div>
+    ${bnav('favs')}</div>`;
+}
+
+// ── CONFIG ────────────────────────────────────────────────────────────────────
+function renderCfg(){
+  return`<div class="screen" style="background:linear-gradient(160deg,#fdf6f0,#f5d5e8)">
+    <div class="band"></div>
+    <div class="list-hdr"><button class="icon-btn" onclick="go('home')" style="color:#7a3f5a">←</button><h2 class="list-title">Configurações</h2><div style="width:40px"></div></div>
+    <div class="list-body">
+      <div class="cfg-card">
+        <div class="cfg-title">🔔 Lembrete Diário</div>
+        <p class="cfg-desc">Receba um lembrete toda manhã com a palavra do dia 🌸</p>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <span style="font-size:14px;color:#5a3a2a">Horário</span>
+          <input type="time" style="border:1px solid rgba(122,63,90,.3);border-radius:10px;padding:7px 12px;font-size:14px;color:#7a3f5a;background:white;outline:none" value="${S.notifTime}" onchange="updNotif(this.value)"/>
         </div>
-        <div style="font-size:20px;">📖</div>
+        <button class="btn-main" onclick="reqNotif()" style="width:100%;padding:12px;font-size:15px">${S.notifOn?'✅ Ativas':'🔔 Ativar notificações'}</button>
       </div>
-      <div class="divider" style="margin-bottom:12px;"></div>
-      <div style="font-family:var(--cf);font-size:15px;line-height:1.8;color:#4a3030;font-style:italic;">${escHtml(d.texto)}</div>
-    </div>`).join('');
+      <div class="cfg-card">
+        <div class="cfg-title">📲 Instalar no celular</div>
+        <p class="cfg-desc">Toque no botão compartilhar → "Adicionar à Tela de Início" → Confirme 🌸</p>
+      </div>
+      <div class="cfg-card">
+        <div class="cfg-title">💕 Sobre</div>
+        <p class="cfg-desc">Feito com amor por <strong>@minhacasinhainterior</strong> para cada florzinha que quer florescer com fé todos os dias.</p>
+        <p style="font-size:12px;color:#b8957e;margin-top:8px">minha-casinha-interior.vercel.app</p>
+      </div>
+    </div>
+    ${bnav('cfg')}</div>`;
 }
 
-// ══════════════════════════════════════════════════════
-// WHATSAPP SHARE
-// ══════════════════════════════════════════════════════
-function shareWhatsApp(){
-  if(!devoCache){ showToast('Aguarde o devocional carregar 🌸'); return; }
-  const d=devoCache;
-  const text=`🌸 *Florescendo — ${d.palavra}*\n\n_${d.referencia}_\n\n"${d.versiculo}"\n\n${d.frase_impacto}\n\n${d.oracao}\n\n@minhacasinhainterior`;
-  window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function render(){
+  const app=document.getElementById('app');
+  let html='';
+  if(S.screen==='home')html=renderHome();
+  else if(S.screen==='devo')html=renderDevo();
+  else if(S.screen==='diario')html=renderDiario();
+  else if(S.screen==='favs')html=renderFavs();
+  else if(S.screen==='cfg')html=renderCfg();
+  if(S.toast)html+=`<div class="toast">${S.toast}</div>`;
+  app.innerHTML=html;
 }
 
-// ══════════════════════════════════════════════════════
-// TOAST
-// ══════════════════════════════════════════════════════
-let toastTimer;
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;
-  t.style.display='block';
-  clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>{t.style.display='none';},2500);
-}
+// ── GLOBALS ───────────────────────────────────────────────────────────────────
+window.go=go;
+window.togFav=togFav;
+window.shareWA=shareWA;
+window.reqNotif=reqNotif;
+window.updNotif=(t)=>{S.notifTime=t;db.setNotif(t);if(S.notifOn)schedNotif();render();};
+window.retryLoad=()=>{S.error=false;init();};
+window.rmFav=(date)=>{db.removeFav(date);if(date===todayISO)S.isFav=false;S.favs=db.getFavs();render();};
+window.atualizarAnotacao=(v)=>{S.anotacao=v;const el=document.getElementById('char-count');if(el)el.textContent=`${v.length} caracteres`;};
+window.salvarAnotacao=()=>{
+  if(!S.anotacao.trim()){S.toast='Escreva algo primeiro 🌸';render();setTimeout(()=>{S.toast=null;render();},2500);return;}
+  const entry={date:todayISO,dataStr:dateStr,palavra:S.devo?.palavra||palavraHoje,texto:S.anotacao};
+  S.diarios=db.saveDiario(entry);
+  S.anotacaoSalva=true;
+  S.toast='Salvo no seu diário! 🌸';
+  render();
+  setTimeout(()=>{S.toast=null;render();},2500);
+};
+window.editarAnotacao=()=>{S.anotacaoSalva=false;render();};
 
-// ══════════════════════════════════════════════════════
-// NOTIFICATIONS
-// ══════════════════════════════════════════════════════
-async function requestNotif(){
-  if(!('Notification' in window)){ showToast('Notificações não suportadas aqui 😔'); return; }
-  const p=await Notification.requestPermission();
-  if(p==='granted'){
-    showToast('Notificações ativadas! 🌸');
-    scheduleNotif();
-  } else {
-    showToast('Permissão negada 😔');
-  }
-}
-
-function scheduleNotif(){
-  if('serviceWorker' in navigator && Notification.permission==='granted'){
-    const now=new Date();
-    const notifTime=new Date(now.getFullYear(),now.getMonth(),now.getDate(),7,0,0);
-    if(notifTime<=now) notifTime.setDate(notifTime.getDate()+1);
-    const delay=notifTime-now;
-    setTimeout(()=>{
-      new Notification('Florescendo 🌸',{
-        body:`A palavra de hoje é: ${palavra}. Abra seu devocional! 🌸`,
-        icon:'/icon-192.png'
-      });
-    },delay);
-  }
-}
+init();
 </script>
 </body>
 </html>
