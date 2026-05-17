@@ -22,10 +22,8 @@ export async function gerarDevocional(date) {
 Seu tom é acolhedor e ativador — como @minhacasinhainterior: carinhoso, nunca pesado, mas que desperta e transforma.
 Sempre chame a leitora de "florzinha".
 Hoje é ${dateStr}. Tema: "${tema}".
-
 Escreva um devocional em 5 páginas, cada uma com 2 blocos de conteúdo.
 Responda APENAS em JSON válido, sem markdown, sem texto fora do JSON:
-
 {
   "palavra": "palavra impactante (1-2 palavras)",
   "tema": "${tema}",
@@ -41,19 +39,12 @@ Responda APENAS em JSON válido, sem markdown, sem texto fora do JSON:
   "oracao": "oração curta, direta e com autoridade — 2-3 frases"
 }`;
 
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 1000,
-      system: "Você escreve devocionais femininos cristãos em português brasileiro. Responda APENAS com JSON válido, sem texto antes ou depois, sem markdown.",
-      messages: [{ role: "user", content: prompt }]
-    })
+  const res = await fetch('/api/devo', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt }),
   });
 
-  const data = await res.json();
-  const text = data.content?.filter(b=>b.type==="text").map(b=>b.text).join("")||"";
-  const clean = text.replace(/```json|```/g,"").trim();
-  return JSON.parse(clean);
+  if (!res.ok) throw new Error('Erro ao buscar devocional');
+  return await res.json();
 }
