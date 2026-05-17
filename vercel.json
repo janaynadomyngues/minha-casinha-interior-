@@ -1,12 +1,5 @@
 {
-  "routes": [
-    {
-      "src": "/api/devo",
-      "dest": "/api/devo.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
